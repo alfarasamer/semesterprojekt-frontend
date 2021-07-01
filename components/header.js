@@ -11,7 +11,7 @@ class Header extends HTMLElement {
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">
-                <img src="./images/Tee_Shirts_Logo.svg" alt="" width="300" height="60" class="d-inline-block align-text-top">
+                <img src="./images/Tee_Shirts_Logo.svg" alt="" width="250" height="60" class="d-inline-block align-text-top">
             </a>
         </div>
     </nav>
