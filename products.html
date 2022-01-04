@@ -1,29 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Products</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-<script src="./js/products.js"></script>
-</head>
-<body>
-    
-<div class="output">
-    <h1 class="category"></h1>
-    <h2 class="item-number"></h2>
-    <h2 class="product-description"></h2>
-    <h2 class="product-long-description"></h2>
-    <h2 class="size"></h2>
-    <h2 class="price"></h2>
-</div>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+    <script src="components/header.js" type="text/javascript" defer></script>
+    <script src="components/footer.js" type="text/javascript" defer></script>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/products-card.css">
+    <link
+      rel="icon"
+      href="./images/Tee_Shirts_Logo.svg"
+      sizes="16x16 32x32"
+      type="image/svg"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <script src="./js/products.js"></script>
+    <script src="./js/products_card.js"></script>
+  </head>
+  <body>
+    <header-component></header-component>
+    <div class="content">
+      <div class="container-fluid">
+        <div class="col-12">
+          <div class="d-flex justify-content-center pageTitle">
+            <h1>Products</h1>
+          </div>
+        </div>
+        <div class="container">
+            <div class="row">              
+                    <div style="display: flex;">
+                        <div id="product-card">
+                            <div id="product-front">
+                                <div class="shadow"></div>
+                                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt.png" alt="" />
+                                <div class="image_overlay"></div>
+                                <div id="view_details">View details</div>
+                                <div class="stats">        	
+                                    <div class="stats-container">
+                                        <span class="product_price">$39</span>
+                                        <span class="product_name">Adidas Originals</span>    
+                                        <p>Men's running shirt</p>
+                                        <div class="product-options">
+                                        <strong>SIZES</strong>
+                                        <span>XS, S, M, L, XL, XXL</span>
+                                        <strong>COLORS</strong>
+                                        <div class="colors">
+                                            <div class="c-blue"><span></span></div>
+                                            <div class="c-red"><span></span></div>
+                                            <div class="c-white"><span></span></div>
+                                            <div class="c-green"><span></span></div>
+                                        </div>
+                                    </div>                       
+                                    </div>                         
+                                </div>
+                            </div> 
+                        </div>	
+                        <div id="product-card">
+                          <div id="product-front">
+                              <div class="shadow"></div>
+                              <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt.png" alt="" />
+                              <div class="image_overlay"></div>
+                              <div id="view_details">View details</div>
+                              <div class="stats">        	
+                                  <div class="stats-container">
+                                      <span class="product_price">$39</span>
+                                      <span class="product_name">Adidas Originals</span>    
+                                      <p>Men's running shirt</p>
+                                      <div class="product-options">
+                                      <strong>SIZES</strong>
+                                      <span>XS, S, M, L, XL, XXL</span>
+                                      <strong>COLORS</strong>
+                                      <div class="colors">
+                                          <div class="c-blue"><span></span></div>
+                                          <div class="c-red"><span></span></div>
+                                          <div class="c-white"><span></span></div>
+                                          <div class="c-green"><span></span></div>
+                                      </div>
+                                  </div>                       
+                                  </div>                         
+                              </div>
+                          </div> 
+                      </div>	
+                    </div>
+            </div>
 
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
-</body>
+          <div class="row">
+            <div class="col-1 col-sm-2 col-md-1 col-lg-1"></div>
+            <div
+              class="
+                col-10 col-sm-8 col-md-10 col-lg-10
+                d-flex
+                justify-content-center
+              "
+            >
+            <div class="output">
+                <h1 class="category"></h1>
+                <h2 class="item-number"></h2>
+                <h2 class="product-description"></h2>
+                <h2 class="product-long-description"></h2>
+                <h2 class="size"></h2>
+                <h2 class="price"></h2>
+            </div> 
+            </div>
+            <div class="col-1 col-sm-2 col-md-1 col-lg-1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="d-flex justify-content-center pageTitle">
+        <h1>Products</h1>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>

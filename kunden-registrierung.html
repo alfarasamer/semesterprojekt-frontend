@@ -11,7 +11,6 @@
     <script src="components/header.js" type="text/javascript" defer></script>
     <script src="components/footer.js" type="text/javascript" defer></script>
     <link rel="stylesheet" href="css/main.css">
-
 </head>
 <body>
 <header-component></header-component>
@@ -24,79 +23,34 @@
 </div>
 <div class="container">
     <div class="row">
-        <div class="col-1 col-sm-2 col-md-2 col-lg-3"></div>
-        <div class="col-10 col-sm-8 col-md-8 col-lg-6 d-flex justify-content-center">
-            <form class="row">
-                <div class="col-md-12" style="text-align: left"><h5>Einloggendaten</h5></div>
-                <div class="col-md-6">
-                    <label for="email" class="form-label">E-Mail Adresse</label>
-                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
-                    <div id="emailHelp" class="form-text">Wir werden Ihre E-Mail niemals mit anderen teilen.</div>
+        <div class="col-10 col-sm-8 col-md-10 col-lg-10 d-flex justify-content-center">
+            <form id="register">
+                <div class="form-group">
+                <div class="mb-3">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required>
                 </div>
-                <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
                     <label for="password" class="form-label">Kennwort</label>
-                    <input type="password" class="form-control" id="password">
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="on">
                 </div>
-                <div class="col-md-12" style="text-align: left"><h5>Persönlichedaten</h5></div>
-                <div class="col-md-2">
-                    <label for="salutation" class="form-label">Anrede</label>
-                    <select id="salutation" class="form-select" required>
-                        <option>Frau</option>
-                        <option>Herr</option>
-                        <option>Anders</option>
-                    </select>
+                <div class="row">
+                        <button type="submit" class="btn btn-primary">Register</button>
                 </div>
-                <div class="col-5">
-                    <label for="firstname" class="form-label">Vorname</label>
-                    <input type="text" class="form-control" id="firstname" required>
-                </div>
-                <div class="col-5">
-                    <label for="lastname" class="form-label">Nachname</label>
-                    <input type="text" class="form-control" id="lastname" required>
-                </div>
-                <div class="col-md-12" style="text-align: left"><h5>Lieferadresse</h5></div>
-                <div class="col-md-4">
-                    <label for="city" class="form-label">Ort</label>
-                    <input type="text" class="form-control" id="city" required>
-                </div>
-                <div class="col-md-8">
-                    <label for="street" class="form-label">Straße</label>
-                    <input type="text" class="form-control" id="street" required>
-                </div>
-                <div class="col-md-4">
-                    <label for="bld" class="form-label">Hausnummer</label>
-                    <input type="text" class="form-control" id="bld" required>
-                </div>
-                <div class="col-md-4">
-                    <label for="door" class="form-label">Türnummer</label>
-                    <input type="text" class="form-control" id="door" required>
-                </div>
-                <div class="col-md-4">
-                    <label for="plz" class="form-label">Postleitzahl</label>
-                    <input type="text" class="form-control" id="plz" required>
-                </div>
-                <div class="col-12">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="gridCheck">
-                        <label class="form-check-label" for="gridCheck">
-                            Ich acceptiere die Datenschutz diese Website
-                        </label>
-                    </div>
-                </div>
-                <div class="col-3"></div>
-                <div class="col-3">
-                    <button type="submit" class="btn btn-primary">Absenden</button>
-                </div>
-                <div class="col-3">
-                    <button type="reset" class="btn btn-primary">Neustarten</button>
-                </div>
-                <div class="col-3"></div>
-                <div class="col-12" style="text-align: center"><p><a href="./kennwortreset.html">Kennwortvergessen</a>
-                </p></div>
+            </div>
             </form>
         </div>
-        <div class="col-1 col-sm-2 col-md-2 col-lg-3"></div>
     </div>
+
+    
 </div>
 
     <div>
@@ -105,5 +59,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
             crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+            <script src="./js/register.js"></script>
 </body>
 </html>

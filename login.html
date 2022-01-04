@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="./images/Tee_Shirts_Logo.svg" sizes="16x16 32x32" type="image/svg">
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="./js/login.js"></script>
 </head>
 <body>
 <header-component></header-component>
@@ -28,14 +29,14 @@
     <div class="row">
         <div class="col-1 col-sm-2 col-md-1 col-lg-1"></div>
         <div class="col-10 col-sm-8 col-md-10 col-lg-10 d-flex justify-content-center">
-            <form name="loginForm" method="post" action="http://localhost:8080/login">
+            <form id="login"">
                 <div class="mb-3">
                     <label for="username" class="form-label">Benuzername</label>
                     <input type="text" class="form-control" id="username" name="username" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Kennwort</label>
-                    <input type="password" class="form-control" id="password" name="password">
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="on">
                 </div>
                 <div class="row">
                     <div class="col">

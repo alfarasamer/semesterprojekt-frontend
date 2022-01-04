@@ -15,7 +15,6 @@
     padding: 20px;
 }
 
-
 .featuerdcol{
     z-index: 2;
     background-image: url("../images/shop-slider.jpg");
@@ -38,3 +37,5 @@
 .featuerdcol1{
     background-image: url("./images/shop-slider.jpg");
 }
+
+

@@ -38,10 +38,16 @@ body {
           <a class="nav-link active" aria-current="page" href="index.html">Startseite</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Produkte</a>
+          <a class="nav-link" href="products.html">Produkte</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          <a class="nav-link" href="brands.html">Brands</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="categories.html">Categories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="admin-dashboard.html">Shop Admin</a>
         </li>
       </ul>
       <div class="d-flex bd-highlight mb-2">
