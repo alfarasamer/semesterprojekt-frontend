@@ -29,7 +29,7 @@ $(document).ready(function() {
             e.preventDefault();
             //$('#wrongPass').hide();
             loginRequest = {username: $("#username").val(),
-        password: $("#password").val()};
+                            password: $("#password").val()};
             $.ajax({
                 url: "http://localhost:8080/login",
                 method: 'POST',
@@ -45,18 +45,34 @@ $(document).ready(function() {
                 data: JSON.stringify(loginRequest),
                 //contentType: 'application/json;charset=UTF-8'
             
-            /*success: function(data)
-            {console.log(Response)
-                console.log(Response.Cookies)
-              Cookies.set("first-cookie",Response.Cookies)
-                if (true) {
-                    console.log("sucess");
-                }
-                else {
-                    alert(data);
-                }
-            }*/
+                /*var jqxhr = $.post( "example.php", function() {
+                    alert( "success" );
+                  })
+                    .done(function() {
+                      alert( "second success" );
+                    })
+                    .fail(function() {
+                      alert( "error" );
+                    })
+                    .always(function() {
+                      alert( "finished" );
+                    });
+                   
+                  // Perform other work here ...
+                   
+                  // Set another completion function for the request above
+                  jqxhr.always(function() {
+                    alert( "second finished" );
+                  }),*/
+                  statusCode: {
+                    200: function() {
+                        
+                        console.log("Logged in", Response)
+                      //alert( "page not found" );
+                    }
+                  }
+  
+            })
             
-            });
         });
     })

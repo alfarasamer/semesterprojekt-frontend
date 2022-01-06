@@ -8,7 +8,11 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Products</title>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700"
+      rel="stylesheet"
+      type="text/css"
+    />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -18,7 +22,7 @@
     <script src="components/header.js" type="text/javascript" defer></script>
     <script src="components/footer.js" type="text/javascript" defer></script>
     <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/products-card.css">
+    <link rel="stylesheet" href="css/products-card.css" />
     <link
       rel="icon"
       href="./images/Tee_Shirts_Logo.svg"
@@ -43,81 +47,182 @@
           </div>
         </div>
         <div class="container">
-            <div class="row">              
-                    <div style="display: flex;">
-                        <div id="product-card">
-                            <div id="product-front">
-                                <div class="shadow"></div>
-                                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt.png" alt="" />
-                                <div class="image_overlay"></div>
-                                <div id="view_details">View details</div>
-                                <div class="stats">        	
-                                    <div class="stats-container">
-                                        <span class="product_price">$39</span>
-                                        <span class="product_name">Adidas Originals</span>    
-                                        <p>Men's running shirt</p>
-                                        <div class="product-options">
-                                        <strong>SIZES</strong>
-                                        <span>XS, S, M, L, XL, XXL</span>
-                                        <strong>COLORS</strong>
-                                        <div class="colors">
-                                            <div class="c-blue"><span></span></div>
-                                            <div class="c-red"><span></span></div>
-                                            <div class="c-white"><span></span></div>
-                                            <div class="c-green"><span></span></div>
-                                        </div>
-                                    </div>                       
-                                    </div>                         
-                                </div>
-                            </div> 
-                        </div>	
-                        <div id="product-card">
-                          <div id="product-front">
-                              <div class="shadow"></div>
-                              <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt.png" alt="" />
-                              <div class="image_overlay"></div>
-                              <div id="view_details">View details</div>
-                              <div class="stats">        	
-                                  <div class="stats-container">
-                                      <span class="product_price">$39</span>
-                                      <span class="product_name">Adidas Originals</span>    
-                                      <p>Men's running shirt</p>
-                                      <div class="product-options">
-                                      <strong>SIZES</strong>
-                                      <span>XS, S, M, L, XL, XXL</span>
-                                      <strong>COLORS</strong>
-                                      <div class="colors">
-                                          <div class="c-blue"><span></span></div>
-                                          <div class="c-red"><span></span></div>
-                                          <div class="c-white"><span></span></div>
-                                          <div class="c-green"><span></span></div>
-                                      </div>
-                                  </div>                       
-                                  </div>                         
-                              </div>
-                          </div> 
-                      </div>	
-                    </div>
-            </div>
+          <div class="row">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Item Number</th>
+                  <th scope="col">Product Description</th>
+                  <th scope="col">Product Long Description</th>
+                  <th scope="col">Size</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Brand</th>
+                  <th scope="col">Category</th>
 
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="output"></tbody>
+            </table>
+          </div>
+          <div class="row">
+            <div class="col-1 col-sm-2 col-md-1 col-lg-1"></div>
+            <div
+              class="col-10 col-sm-8 col-md-10 col-lg-10 d-flex justify-content-center"
+            >
+              <form id="category" url="http://localhost:8080/products">
+                <div class="form-group">
+                  <div class="mb-3">
+                    <label for="product-description" class="form-label"
+                      >Product Description</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="product-description"
+                      name="product-description"
+                      required
+                    />
+                    <label for="product-long-description" class="form-label"
+                      >Product Long Description</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="product-long-description"
+                      name="product-long-description"
+                      required
+                    />
+                    <label for="size" class="form-label">Size</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="size"
+                      name="size"
+                      required
+                    />
+                    <label for="status" class="form-label">Status</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="status"
+                      name="status"
+                      required
+                    />
+                    <label for="price" class="form-label">Price</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="price"
+                      name="price"
+                      required
+                    />
+                    <label for="brand" class="form-label">Brand</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="brand"
+                      name="brand"
+                      required
+                    />
+                    <label for="category" class="form-label">Category</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="category"
+                      name="category"
+                      required
+                    />
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <button type="submit" class="btn btn-primary">
+                        Create
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-1 col-sm-2 col-md-1 col-lg-1"></div>
+          </div>
+          <div class="row">
+            <div style="display: flex">
+              <div id="product-card">
+                <div id="product-front">
+                  <div class="shadow"></div>
+                  <img
+                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt.png"
+                    alt=""
+                  />
+                  <div class="image_overlay"></div>
+                  <div id="view_details">View details</div>
+                  <div class="stats">
+                    <div class="stats-container">
+                      <span class="product_price">$39</span>
+                      <span class="product_name">Adidas Originals</span>
+                      <p>Men's running shirt</p>
+                      <div class="product-options">
+                        <strong>SIZES</strong>
+                        <span>XS, S, M, L, XL, XXL</span>
+                        <strong>COLORS</strong>
+                        <div class="colors">
+                          <div class="c-blue"><span></span></div>
+                          <div class="c-red"><span></span></div>
+                          <div class="c-white"><span></span></div>
+                          <div class="c-green"><span></span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="product-card">
+                <div id="product-front">
+                  <div class="shadow"></div>
+                  <img
+                    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt.png"
+                    alt=""
+                  />
+                  <div class="image_overlay"></div>
+                  <div id="view_details">View details</div>
+                  <div class="stats">
+                    <div class="stats-container">
+                      <span class="product_price">$39</span>
+                      <span class="product_name">Adidas Originals</span>
+                      <p>Men's running shirt</p>
+                      <div class="product-options">
+                        <strong>SIZES</strong>
+                        <span>XS, S, M, L, XL, XXL</span>
+                        <strong>COLORS</strong>
+                        <div class="colors">
+                          <div class="c-blue"><span></span></div>
+                          <div class="c-red"><span></span></div>
+                          <div class="c-white"><span></span></div>
+                          <div class="c-green"><span></span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div class="row">
             <div class="col-1 col-sm-2 col-md-1 col-lg-1"></div>
             <div
-              class="
-                col-10 col-sm-8 col-md-10 col-lg-10
-                d-flex
-                justify-content-center
-              "
+              class="col-10 col-sm-8 col-md-10 col-lg-10 d-flex justify-content-center"
             >
-            <div class="output">
+              <div class="output">
                 <h1 class="category"></h1>
                 <h2 class="item-number"></h2>
                 <h2 class="product-description"></h2>
                 <h2 class="product-long-description"></h2>
                 <h2 class="size"></h2>
                 <h2 class="price"></h2>
-            </div> 
+              </div>
             </div>
             <div class="col-1 col-sm-2 col-md-1 col-lg-1"></div>
           </div>

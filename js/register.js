@@ -8,7 +8,7 @@ $(document).ready(function() {
             data: {
                 firstName:$("#firstName").val(),
                 lastName:$("#lastName").val(),
-                email:$("#email").val(),
+                username:$("#username").val(),
                 password:$("#password").val()
                 },
             /*success: function(data)

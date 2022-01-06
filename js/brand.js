@@ -1,7 +1,3 @@
-
-
-
-
 function listAllBrands() {
     $.getJSON('http://localhost:8080/brands', function (data) {
         $.each(data, function (index, brand) {
@@ -9,7 +5,8 @@ function listAllBrands() {
             var brandName = brand.brandName;
             $('.output').append('<tr><th class="brand-id" scope="row">' + id +
                 '</th><td class="brand-name">'
-                + brandName + '</td><td>Edit - <input type="button" value="clickme" onclick="deleteBrandById('+id+')" /></td></tr>');
+                + brandName + 
+                '</td><td>Edit - <input type="button" class="btn btn-danger" value="delete" onclick="deleteBrandById('+id+')" /></td></tr>');
         });
     });
 }
@@ -25,7 +22,6 @@ function deleteBrandById(id) {
         dataType: "json",
         statusCode: {
             200: function() {
-            $('#brand')[0].reset();
             $('.output').replaceWith('<tbody class="output">'+listAllBrands()+'</tbody>')
             }
           }
