@@ -1,0 +1,119 @@
+/* Universal styling for all cards*/
+
+.products-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.products-cards-container{
+    max-width: 80vw;
+
+}
+.image-container{
+    height: 170px;
+}
+.card{
+    border: none;
+    outline: none;
+    background-color:white;
+    box-shadow: 0px 0px 5px lightgrey;
+    border-radius: 20px;
+    transition: transfotm .3s;
+}
+.card:hover{
+ transform: translateY(-15px);
+ opacity: 1;
+ transition: .3s;
+}
+
+.description{
+    font-size: 16px;
+    color: gray;
+}
+.info{
+line-height: 17px;
+}
+
+.price span{
+color: blue;
+font-weight: bold;
+font-size: 20px;
+}
+.size-s{
+    text-align: center;
+    background: rgb(255, 143, 143);
+    width: fit-content;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    border-radius: 100px;
+    color: white;
+}
+.size-m{
+    text-align: center;
+    background: rgb(255, 114, 114);
+    width: fit-content;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    border-radius: 100px;
+    color: white;
+}
+.size-l{
+    text-align: center;
+    background: rgb(255, 78, 78);
+    width: fit-content;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    border-radius: 100px;
+    color: white;
+}
+.size-xl{
+    text-align: center;
+    background: rgb(255, 25, 25);
+    width: fit-content;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    border-radius: 100px;
+    color: white;
+}
+.size-xxl{
+    text-align: center;
+    background: red;
+    width: fit-content;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    border-radius: 100px;
+    color: white;
+}
+
+
+
+
+.view-button{
+    background: blue;
+    transition: transfotm .3s;
+}
+.view-button:hover{
+    background: red;
+    transition: .3s;   
+}
+.button-text{
+    cursor: none;
+}
+
+/*uni*/
+
+.cursor{
+    cursor: pointer;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}

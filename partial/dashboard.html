@@ -1,0 +1,72 @@
+<script type="text/javascript">
+  $(document).ready(function () {
+    getCounts();
+  });
+
+function getCounts() {
+
+  $.getJSON('http://localhost:8080/counts', function (counts) {
+      $('.brands-count').replaceWith('<div class="count-number brands-count" id="brands-count">' + counts.brandsCount + '</div>');
+      $('.products-count').replaceWith('<div class="count-number products-count" id="products-count">' + counts.productsCount + '</div>');
+      $('.categories-count').replaceWith('<div class="count-number categories-count" id="categories-count">' + counts.categoriesCount+ '</div>');
+      $('.users-count').replaceWith('<div class="count-number users-count" id="brands-count">' + counts.usersCount + '</div>')
+    });
+}
+</script>
+
+
+<div>
+    <div class="col-12">
+      <div class="d-flex justify-content-center pageTitle">
+        <h1>Dashboard</h1>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 mb-4 ">
+          <div class="card users-dashboard-card">
+            <div class="card-body m-2 d-flex justify-content-center flex-column">
+              <span class="d-flex  justify-content-center mb-2"><i class='bx bx-user card-icon'></i></span>
+              <h4 class="card-title text-center dashboard-card-title">Benutzer</h4>
+              <div class="count-number users-count" id="users-count"></div>
+              <div class="d-flex justify-content-center mt-2"><a href="#users" class="btn btn-outline-light">Benutzer Verwaltung</a></div>
+            </div>
+          </div>
+        </div>
+
+          <div class="col-sm-6 mb-4 ">
+            <div class="card brands-dashboard-card">
+              <div class="card-body m-2 d-flex justify-content-center flex-column">
+                <span class="d-flex  justify-content-center mb-2"><i class='bx bx-wink-tongue card-icon'></i></span>
+                <h4 class="card-title text-center dashboard-card-title">Marken</h4>
+                <div class="count-number brands-count" id="brands-count"></div>
+                <div class="d-flex justify-content-center mt-2"><a href="#brands" class="btn btn-outline-light">Marken Verwaltung</a></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 mb-4 ">
+            <div class="card categories-dashboard-card">
+              <div class="card-body m-2 d-flex justify-content-center flex-column">
+                <span class="d-flex  justify-content-center mb-2"><i class='bx bx-category card-icon'></i></span>
+                <h4 class="card-title text-center dashboard-card-title">Kategorien</h4>
+                <div class="count-number categories-count" id="categories-count"></div>
+                <div class="d-flex justify-content-center mt-2"><a href="#categories" class="btn btn-outline-light">Kategorien Verwaltung</a></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 mb-4 ">
+            <div class="card products-dashboard-card">
+              <div class="card-body m-2 d-flex justify-content-center flex-column">
+                <span class="d-flex  justify-content-center mb-2"><i class='bx bxs-t-shirt card-icon'></i></span>
+                <h4 class="card-title text-center dashboard-card-title">Produkte</h4>
+                <div class="count-number products-count" id="products-count"></div>
+                <div class="d-flex justify-content-center mt-2"><a href="#products" class="btn btn-outline-light">Produkte Verwaltung</a></div>
+              </div>
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>

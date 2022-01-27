@@ -1,0 +1,284 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+      listAllCategories();  
+    });
+    function listAllCategories() {
+    $('.output-categories').replaceWith('<tbody class="output-categories"></tbody>')
+    $.getJSON('http://localhost:8080/categories', function (data) {
+        $.each(data, function (index, category) {
+            var id = category.id;
+            var categoryName = category.categoryName;
+            $('.output-categories').append('<tr><th class="category-id" scope="row">' + id + 
+            '</th><td class="category-name">'
+            + categoryName + 
+            '</td><td><ul class="list-inline m-0"><li class="list-inline-item"><button class="btn btn-success btn-sm rounded-0"  onclick="showCategoryEditModal('+id+')" type="button" data-toggle="tooltip" data-placement="top"  data-bs-toggle="modal" data-bs-target="#editModal" title="Bearbeiten"><ion-icon name="create-outline"></ion-icon></button></li><li class="list-inline-item">'+
+            '<button class="btn btn-danger btn-sm rounded-0" onclick="deleteCategoryById('+id+')" type="button" data-toggle="tooltip" data-placement="top" title="Löschen"><ion-icon name="trash-outline"></ion-icon></button></li></ul></td>');            
+        });
+    });
+}
+
+function showCategoryEditModal(id) {
+        getCategoryById(id).then((data)=>{
+        $('#category-id-edit').val(data.id),
+        $('#category-name-edit').val(data.categoryName)
+    }).catch((err)=>{
+        console.log(err)
+    })
+     
+    var myModalEl2 = document.querySelector('#editBrandModal')
+var modal = bootstrap.Modal.getOrCreateInstance(myModalEl2)
+
+   
+         $('#editBrandModal').modal('show');
+ }
+
+
+ function getCategoryById(id) {
+    return new Promise((resolve, reject) => {
+        resolve(
+            $.getJSON('http://localhost:8080/categories/'+id, function (data) {
+                    }),
+                    );
+      })       
+}
+
+function deleteCategoryById(id) {
+    $.ajax({
+        type: "DELETE",
+        url: 'http://localhost:8080/categories/'+id,
+        dataType: "json",
+        statusCode: {
+            200: function() {
+            $('.output-categories').replaceWith('<tbody class="output-categories">'+listAllCategories()+'</tbody>')
+            },
+            500: function () {
+                $('#cannotDeleteModal').modal('show');
+            }
+          }
+    })
+}
+
+$(function() {
+    $('#category').submit(function(e) {
+        e.preventDefault();
+        category = {"categoryName":$("#category-name").val()};
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:8080/categories',
+            contentType: "application/json",
+            data: JSON.stringify(category),
+            statusCode: {
+                200: function() {
+                    $('#category')[0].reset();
+                    $('.output-categories').replaceWith('<tbody class="output-categories">'+listAllCategories()+'</tbody>')
+                    $('#message').hide();    
+            },
+                400 : () => {
+                    $('#message').show();
+                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder  alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>');
+            },
+                500 : ()=> {
+                    $('#message').show();
+                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder  alert alert-danger">Diese Kategorie gibt es bereits! Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es erneut</div>');
+                }
+              }
+        })
+    })
+})
+
+$(document).ready(function() {
+    $('#category-edit').submit(function(e) {
+        e.preventDefault();
+        id = $("#category-id-edit").val()
+        categoryToEdit = {
+                "categoryName":$("#category-name-edit").val()};
+        $.ajax({
+            type: "PUT",
+            url: 'http://localhost:8080/categories/'+id,
+            contentType: "application/json",
+            data: JSON.stringify(categoryToEdit),
+            statusCode: {
+                200: function() {
+                    $('#category-edit')[0].reset();
+                    $('.output-categories').replaceWith('<tbody class="output-categories">'+listAllCategories()+'</tbody>')
+                    $('#message').hide();    
+            },
+                400 : () => {
+                    $('#message').show();
+                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder  alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>');
+            },
+                500 : ()=> {
+                  $('#cannotEditModal').modal('show');
+                }
+              }
+        });
+    });
+});
+
+
+
+
+
+
+
+
+
+  </script>
+
+
+<div id="categories-partial" class="container-fluid">
+    <div class="col-12">
+      <div class="d-flex justify-content-center pageTitle">
+        <h1>Kategorien</h1>
+      </div>
+    </div>
+    <div class="container">
+        
+        <!-- Create Modal -->
+        <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">
+                    Kategorie erstellen
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+  
+                  <form id="category">
+                    <div class="form-group">
+                      <div class="mb-3">
+                        <label for="category-name" class="form-label">Kategorienname</label>
+                        <input type="text" class="form-control category-name-form" id="category-name"
+                          name="category-name" required />
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <button type="submit" class="btn btn-primary">
+                            Erstellen
+                          </button>
+                        </div>
+                        <div id="message" class="message-placeholder"></div>
+                      </div>
+                    </div>
+                  </form>
+  
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Schließen
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Edit Modal -->
+          <div class="modal fade" id="editBrandModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">
+                    Kategorie bearbeiten
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form id="category-edit">
+                    <div class="form-group">
+                      <div class="mb-3">
+                        <label for="category-id-edit" class="form-label">Kategorie-Id</label>
+                        <input type="text" class="form-control category-name-form" id="category-id-edit" name="category-id-edit"
+                        readonly />
+                      </div>
+                      <div class="mb-3">
+                        <label for="category-name-edit" class="form-label">Kategorienname</label>
+                        <input type="text" class="form-control category-name-form" id="category-name-edit"
+                          name="category-name-edit" required />
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
+                            Bearbeiten
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div id="message" class="message-placeholder"></div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Schließen
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Cannot Detele Modal -->
+          <div class="modal fade" id="cannotDeleteModal" tabindex="-1" aria-labelledby="cannotDeleteModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cannotDeleteModalLabel">
+                    Kategorie Kann nicht gelöscht werden
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Diese Kategorie wird von einem oder mehreren Produkten verwendet
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Schließen
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cannot Edit Modal -->
+          <div class="modal fade" id="cannotEditModal" tabindex="-1" aria-labelledby="cannotEditModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cannotEditModalLabel">
+                    Doppelte Eingabe
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  eine Kategorie mit demselben Namen existiert bereits!
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Schließen
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Kategorie-Name</th>
+                  <th scope="col">Aktionen</th>
+                </tr>
+              </thead>
+              <tbody class="output-categories"></tbody>
+            </table>
+          </div>
+          <div class="row">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+              Kategorie erstellen
+            </button>
+          </div>
+    </div>
+  </div>

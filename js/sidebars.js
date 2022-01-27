@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   if(toggle && nav && bodypd && headerpd){
   toggle.addEventListener('click', ()=>{
   // show navbar
-  nav.classList.toggle('show')
+  nav.classList.toggle('expand')
   // change icon
   toggle.classList.toggle('bx-x')
   // add padding to body
@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   
   showNavbar('header-toggle','nav-bar','body-pd','header')
   
-  /*===== LINK ACTIVE =====*/
   const linkColor = document.querySelectorAll('.nav_link')
   
   function colorLink(){
@@ -34,5 +33,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
   linkColor.forEach(l=> l.addEventListener('click', colorLink))
   
-  // Your code to run since DOM is loaded and ready
   });

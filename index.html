@@ -1,24 +1,67 @@
 <!doctype html>
 <html lang="de">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Startseite</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <script src="components/header.js" type="text/javascript" defer></script>
-    <script src="components/footer.js" type="text/javascript" defer></script>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="icon" href="./images/Tee_Shirts_Logo.svg" sizes="16x16 32x32" type="image/svg">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Startseite</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <script src="components/footer.js" type="text/javascript" defer></script>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/home-page.css">
+  <link rel="stylesheet" href="css/product-card.css" />
+  <link rel="icon" href="./images/Tee_Shirts_Logo.svg" sizes="16x16 32x32" type="image/svg">
 </head>
+
 <body>
-<header-component></header-component>
-<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <header>
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+          <img src="./images/Tee_Shirts_Logo.svg" alt="" width="250" height="60" class="d-inline-block align-text-top">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Startseite</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="products.html">Produkte</a>
+            </li>
+            <li id="admin" class="nav-item">
+              <a class="nav-link" href="admin-dashboard.html">Shop Admin</a>
+            </li>
+          </ul>
+          <div class="d-flex bd-highlight mb-2">
+            <div id="login" class="p-2 bd-highlight"><a class="btn btn-primary" href="login.html"
+                role="button">Einloggen</a></div>
+            <div id="logout" name="logout" class="logout p-2 bd-highlight"><a class="btn btn-primary"
+                role="button">Abmelden</a></div>
+            <div id="register" class="p-2 bd-highlight"><a class="btn btn-secondary" href="kunden-registrierung.html"
+                role="button">Regestrierung</a></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+        aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+        aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+        aria-label="Slide 3"></button>
     </div>
     <div class="carousel-inner">
       <div class="carousel-item active">
@@ -31,32 +74,63 @@
         <img src="images/shop-slider1.jpg" class="d-block w-100" alt="...">
       </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
   </div>
   <div class="featuers">
-    <div class="row align-items-start featuerd">
-        <div class="col featuerdcol featuerdcol1">
-          One of three columns
-        </div>
-        <div class="col featuerdcol">
-          One of three columns
-        </div>
-        <div class="col featuerdcol">
-          One of three columns
+    <div class="d-flex justify-content-center featuerd">
+      <div class="col-sm-3 featuerdcol featuerdcol1">
+        <h1 class="featuers-title">SOMMER</h1>
+      </div>
+      <div class="col-sm-3 featuerdcol">
+        <h1 class="featuers-title">WINTER</h1>
+      </div>
+      <div class="col-sm-3 featuerdcol featuerdcol3">
+        <h1 class="featuers-title">ALLE JAHRZEITEN</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="container-fluid products-container">
+      <!--Container for all products-->
+      <div class="products-cards-container col-12">
+        <div class="row" id="output">
         </div>
       </div>
+    </div>
   </div>
-<div class="content" ><h1>Startseite</h1></div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-<script src="js/main.js"></script>
-<div><footer-component></footer-component></div>
+
+  <div>
+    <footer class="footer">
+      <div class="row">
+        <p>
+          <a href="Impressum.html" data-toggle="tooltip" title="Impressum">Impressum</a>
+          <a href="hilfe.html" data-toggle="tooltip" title="Hilfe">Hilfe</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+    crossorigin="anonymous"></script>
+  <script src="./js/main.js"></script>
+  <script src="./js/products.js"></script>
+
+
 </body>
+
 </html>

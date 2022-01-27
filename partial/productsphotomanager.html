@@ -1,0 +1,264 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+      listAllPhotos();  
+    });
+    function listAllPhotos() {
+    $('.output-photos').replaceWith('<tbody class="output-photos"></tbody>')
+    $.getJSON('http://localhost:8080/products', function (data) {
+        console.log(data)
+        $.each(data, function (index, product) {
+            if (product.imageUrl == null ||product.imageUrl == "" ) {
+        var itemNumber = product.itemNumber;
+        var description = product.description;
+        var imageUrl = "/images/products/not_available.png";
+            $('.output-photos').append('<tr><th class="item-number" scope="row">'+itemNumber+
+        '</th><td class="productdescription">'+description+
+        '</td><td class="image-thumbnail"><img class="product-image-thumbnail" src="'+imageUrl+'">'+
+        '</td>'+
+        '<td><ul class="list-inline m-0"><li class="list-inline-item"><button class="btn btn-success btn-sm rounded-0"  onclick="showAddPhotoModel('+itemNumber+')" type="button" data-toggle="tooltip" data-placement="top" title="Foto hinzufügen"><ion-icon name="add-outline"></ion-icon></button></li></ul></td>'
+        );
+            } else {
+        var itemNumber = product.itemNumber;
+        var description = product.description;
+        var imageUrl = product.imageUrl;
+        console.log("URL",imageUrl)
+            $('.output-photos').append('<tr><th class="item-number" scope="row">'+itemNumber+
+        '</th><td class="productdescription">'+description+
+        '</td><td class="image-thumbnail"><img class="product-image-thumbnail" src="'+imageUrl+'">'+
+        '</td>'+
+        '<td><ul class="list-inline m-0"><li class="list-inline-item"><button class="btn btn-success btn-sm rounded-0" onclick="showAddPhotoModel('+itemNumber+')" type="button" data-toggle="tooltip" data-placement="top" title="Foto bearbeiten"><ion-icon name="create-outline"></ion-icon></button></li></ul></td>'
+        );
+    }
+});
+    });
+}
+//showEditPhotoModel('+itemNumber+')
+
+//showAddPhotoModel('+itemNumber+')
+
+function showAddPhotoModel(itemNumber) {
+        getProductById(itemNumber).then((data)=>{
+        $('#itemNumber').val(data.itemNumber)
+
+    }).catch((err)=>{
+        console.log(err)
+    })
+     
+    var myModalEl4 = document.querySelector('#addPhotoModal')
+var modal = bootstrap.Modal.getOrCreateInstance(myModalEl4)
+
+   
+         $('#addPhotoModal').modal('show');
+ }
+
+ function getProductById(itemNumber) {
+    return new Promise((resolve, reject) => {
+        resolve(
+            $.getJSON('http://localhost:8080/products/'+itemNumber, function (data) {
+                console.log("this is Data Promise",data)
+                    }),
+                    );
+      })       
+}
+
+$(function () {
+    $('.imageUploadForm').submit(function (e) {
+    form = $('.imageUploadForm')[0];            
+        data = new FormData(form);
+        e.preventDefault();
+        $("#submitButton").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:8080/upload-product-image',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeOut: 1000000,
+            success: function (data) {
+            $("#submitButton").preventDefault();
+            },
+            error: function (e) {
+            console.log("ERROR : ", e);
+            $("#submitButton").prop("disabled", false);
+            }
+        });
+    });
+});
+  </script>
+
+
+<div id="users-partial" class="container-fluid">
+    <div class="col-12">
+      <div class="d-flex justify-content-center pageTitle">
+        <h1>Produktbildern</h1>
+      </div>
+    </div>
+    <div class="container">
+
+        <!-- Create Modal -->
+        <div class="modal fade" id="addPhotoModal" tabindex="-1" aria-labelledby="addPhotoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">
+                    Foto hochladen
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">                    
+                    <form id="fileUploadForm" class="imageUploadForm">
+                        <div class="form-group">
+                          <div class="mb-3">
+                            <label for="itemNumber" class="form-label">Artikel#</label>
+                            <input type="text" class="form-control" id="itemNumber" name="itemNumber"
+                             readonly  />
+                            <label for="file" class="form-label">Produktbild</label>
+                            <input type="file" class="form-control" name="file"/>
+                          </div>
+                          <div class="row">
+                            <div class="col">
+                              <button type="submit" id="submitButton" class="btn btn-primary">
+                                hochladen
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Schließen
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Edit Modal -->
+          <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">
+                    Benutzer bearbeiten
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form id="user-edit">
+                    <div class="form-group">
+                      <div class="mb-3">
+                        <label for="id-edit" class="form-label">Id</label>
+                        <input type="text" class="form-control" id="id-edit" name="id-edit"
+                        disabled />  
+                        <label for="first-name-edit" class="form-label">Vorname</label>
+                        <input type="text" class="form-control" id="first-name-edit" name="first-name-edit"
+                          required />
+                          <label for="last-name-edit" class="">Nachname</label>
+                        <input type="text" class="form-control" id="last-name-edit" name="last-name-edit"
+                          required />
+                          <label for="user-name-edit" class="">Email</label>
+                        <input type="text" class="form-control" id="user-name-edit" name="user-name-edit"
+                          required />
+                          <label for="password-edit" class="">Kennwort</label>
+                        <input type="text" class="form-control" id="password-edit" name="password-edit"
+                          required />
+                          <label for="role-edit">Rolle</label>  
+                        <select class="form-control" id="role-edit">
+                          <option disabled selected value>Eine Option auswählen</option>
+                          <option value="ROLE_USER">User</option>
+                          <option value="ROLE_ADMIN">Admin</option>
+                        </select>
+                            <label for="locked-edit">Locked</label>  
+                        <select class="form-control" id="locked-edit">
+                          <option disabled selected value>Eine Option auswählen</option>
+                          <option value="true">Locked</option>
+                          <option value="false">Not Locked</option>
+                        </select>
+                            <label for="enabled-edit">Enabled</label>  
+                        <select class="form-control" id="enabled-edit">
+                          <option disabled selected value>Eine Option auswählen</option>
+                          <option value="true">Enabled</option>
+                          <option value="false">Not Enabled</option>
+                        </select>
+                            <label for="account-non-locked-edit">Account Non Locked</label>  
+                        <select class="form-control" id="account-non-locked-edit">
+                          <option disabled selected value>Eine Option auswählen</option>
+                          <option value="true">Locked</option>
+                          <option value="false">Not Locked</option>
+                        </select>
+                            <label for="authority-edit">Account Non Locked</label>  
+                        <select class="form-control" id="authority-edit">
+                          <option disabled selected value>Eine Option auswählen</option>
+                          <option value="ROLE_USER">User</option>
+                          <option value="ROLE_ADMIN">Admin</option>
+                        </select>
+                            <label for="account-non-expired-edit">Account Non Locked</label>  
+                        <select class="form-control" id="account-non-expired-edit">
+                          <option disabled selected value>Eine Option auswählen</option>
+                          <option value="true">Ja</option>
+                          <option value="false">Nein</option>
+                        </select>
+                            <label for="credentials-non-expired-edit">Account Non Locked</label>  
+                        <select class="form-control" id="credentials-non-expired-edit">
+                          <option disabled selected value>Eine Option auswählen</option>
+                          <option value="true">Ja</option>
+                          <option value="false">Nein</option>
+                        </select>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
+                            Bearbeiten
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Schließen
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Cannot Detele Modal -->
+          <div class="modal fade" id="cannotDeleteModal" tabindex="-1" aria-labelledby="cannotDeleteModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cannotDeleteModalLabel">
+                    Benutzer Kann nicht gelöscht werden
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Diese Benutzer hat eine oder mehrere Bestellungen
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Schließen
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <table class="table">
+              <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Produkt</th>
+                    <th scope="col">Vorschau</th>
+                    <th scope="col">Aktionen</th>
+                </tr>
+              </thead>
+              <tbody class="output-photos"></tbody>
+            </table>
+          </div>
+    </div>
+  </div>

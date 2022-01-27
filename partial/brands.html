@@ -1,0 +1,282 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    listAllBrands();  
+  });
+
+
+  function listAllBrands() {
+        $('.output-brands').replaceWith('<tbody class="output-brands"></tbody>')
+    $.getJSON('http://localhost:8080/brands', function (data) {
+        $.each(data, function (index, brand) {
+            var id = brand.id;
+            var brandName = brand.brandName;
+            $('.output-brands').append('<tr><th class="brand-id" scope="row">' + id +
+                '</th><td class="brand-name">'
+                + brandName +
+                '</td><td><ul class="list-inline m-0"><li class="list-inline-item"><button class="btn btn-success btn-sm rounded-0"  onclick="showEditModal('+id+')" type="button" data-toggle="tooltip" data-placement="top" data-bs-toggle="modal" data-bs-target="#editModal" title="Bearbeiten"><ion-icon name="create-outline"></ion-icon></button></li><li class="list-inline-item">'+
+                '<button class="btn btn-danger btn-sm rounded-0" onclick="deleteBrandById('+id+')" type="button" data-toggle="tooltip" data-placement="top" title="Löschen"><ion-icon name="trash-outline"></ion-icon></button></li></ul></td>');
+            });
+    });
+}
+
+function showEditModal(id) {
+    getBrandById(id).then((data)=>{
+    $('#brand-id-edit').val(data.id),
+    $('#brand-name-edit').val(data.brandName)
+}).catch((err)=>{
+    console.log(err)
+})
+ 
+var myModalEl = document.querySelector('#editModal')
+var modal = bootstrap.Modal.getOrCreateInstance(myModalEl)
+
+
+     $('#editModal').modal('show');
+}
+
+
+function getBrandById(id) {
+    return new Promise((resolve, reject) => {
+        resolve(
+            $.getJSON('http://localhost:8080/brands/'+id, function (data) {
+                console.log("this is Data Promise",data)
+                    }),
+                    );
+      })       
+}
+
+function deleteBrandById(id) {
+    $.ajax({
+        type: "DELETE",
+        url: 'http://localhost:8080/brands/'+id,
+        dataType: "json",
+        statusCode: {
+            200: function() {
+            $('.output-brands').replaceWith('<tbody class="output-brands">'+listAllBrands()+'</tbody>')            
+            },
+            500: function () {
+                $('#cannotDeleteModal').modal('show');
+            }
+          }
+    })
+}
+
+$(document).ready(function() {
+    $('#brand').submit(function(e) {
+        e.preventDefault();
+        brand = {"brandName":$("#brand-name").val()};
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:8080/brands',
+            contentType: "application/json",
+            data: JSON.stringify(brand),
+            statusCode: {
+                200: function() {
+                $('#brand')[0].reset();
+                $('.output-brands').replaceWith('<tbody class="output-brands">'+listAllBrands()+'</tbody>');
+                $('#message').hide();
+                },
+                400 : () => {
+                    $('#message').show();
+                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>');
+                },
+                500 : ()=> {
+                    $('#message').show();
+                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder alert alert-danger">Diese Marke gibt es bereits! Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es erneut</div>');
+                }
+              }
+        })
+    })
+})
+$(document).ready(function() {
+    $('#brand-edit').submit(function(e) {
+        e.preventDefault();
+        brandToEdit = {"id":$("#brand-id-edit").val(),
+                "brandName":$("#brand-name-edit").val()};
+                console.log("Here We are",brandToEdit)
+        $.ajax({
+            type: "PUT",
+            url: 'http://localhost:8080/brands/'+brandToEdit.id,
+            contentType: "application/json",
+            data: JSON.stringify(brandToEdit),
+            statusCode: {
+                200: function() {
+                    $('#brand-edit')[0].reset();
+                    $('.output-brands').replaceWith('<tbody class="output-brands">'+listAllBrands()+'</tbody>')
+                    $('#message').hide();    
+            },
+                400 : () => {
+                    $('#message').show();
+                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>');
+            },
+                500 : ()=> {
+                  $('#cannotEditModal').modal('show');
+                }
+              }
+        });
+    });
+});
+</script>
+
+<div id="brands-partial" class="container-fluid">
+    <div class="col-12">
+      <div class="d-flex justify-content-center pageTitle">
+        <h1>Marken</h1>
+      </div>
+    </div>
+    <div class="container">
+
+      <!-- Create Modal -->
+      <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">
+                Marke erstellen
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+              <form id="brand">
+                <div class="form-group">
+                  <div class="mb-3">
+                    <label for="brand-name" class="form-label">Markenname</label>
+                    <input type="text" class="form-control brand-name-form" id="brand-name" name="brand-name"
+                      required />
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <button type="submit" class="btn btn-primary">
+                        Erstellen
+                      </button>
+                    </div>
+                    <div id="message" class="message-placeholder"></div>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Schließen
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Modal -->
+      <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">
+                Marke bearbeiten
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+              <form id="brand-edit">
+                <div class="form-group">
+                  <div class="mb-3">
+                    <label for="brand-id-edit" class="form-label">Marke-Id</label>
+                    <input type="text" class="form-control brand-name-form" id="brand-id-edit" name="brand-id-edit"
+                    readonly />
+                  </div>
+                  <div class="mb-3">
+                    <label for="brand-name-edit" class="form-label">Markenname</label>
+                    <input type="text" class="form-control brand-name-form" id="brand-name-edit"
+                      name="brand-name-edit" required />
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
+                        Bearbeiten
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Schließen
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cannot Detele Modal -->
+      <div class="modal fade" id="cannotDeleteModal" tabindex="-1" aria-labelledby="cannotDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="cannotDeleteModalLabel">
+                Marke Kann nicht gelöscht werden
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Diese Marke wird von einem oder mehreren Produkten verwendet
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Schließen
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cannot Edit Modal -->
+      <div class="modal fade" id="cannotEditModal" tabindex="-1" aria-labelledby="cannotEditModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cannotEditModalLabel">
+              Doppelte Eingabe
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            eine Marke mit demselben Namen existiert bereits!
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Schließen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="row">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Markenname</th>
+              <th scope="col">Aktionen</th>
+            </tr>
+          </thead>
+          <tbody class="output-brands"></tbody>
+        </table>
+      </div>
+      <div class="row">
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+          Marke erstellen
+        </button>
+      </div>
+      <div class="col-1 col-sm-2 col-md-1 col-lg-1">
+       
+      </div>
+    </div>
+  </div>

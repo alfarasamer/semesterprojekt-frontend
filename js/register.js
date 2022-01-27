@@ -1,27 +1,29 @@
 $(document).ready(function() {
     $('#register').submit(function(e) {
         e.preventDefault();
+        user = {
+            "firstName":$("#firstName").val(),
+            "lastName":$("#lastName").val(),
+            "username":$("#username").val(),
+            "password":$("#password").val()
+        }
+        
         $.ajax({
             type: "POST",
             url: 'http://localhost:8080/registration',
-            dataType: "json",
-            data: {
-                firstName:$("#firstName").val(),
-                lastName:$("#lastName").val(),
-                username:$("#username").val(),
-                password:$("#password").val()
+            contentType: "application/json",
+            data: JSON.stringify(user),
+            statusCode: {
+                200: function() {
+                    console.log("User Created")
                 },
-            /*success: function(data)
-            {
-                console.log(Response.Cookies)
-              Cookies.set("first-cookie",Response.Cookies)
-                if (true) {
-                    console.log("sucess");
+                400 : () => {
+                    console.log("Error 400")
+                },
+                500 : ()=> {
+                    console.log("Error 500")
                 }
-                else {
-                    alert(data);
-                }
-            }*/
+              }
         });
     });
     

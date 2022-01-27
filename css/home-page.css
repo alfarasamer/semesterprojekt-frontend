@@ -1,0 +1,41 @@
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+.featuerdcol{
+  z-index: 2;
+  background:#0d6efd;
+  margin-left:20px;
+  margin-right:20px;
+  padding-top: 0;
+  padding-left:20px;
+  padding-right:20px;
+  min-height: 150px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+align-items: center;
+}
+.featuers-title{
+  color: white;
+}
+.featuers{
+  margin-top: -75px;
+}
+
+.featuerdcol1{
+  background:red;
+}
+.featuerdcol3{
+  background:red;
+}
+
