@@ -1,11 +1,19 @@
 <script type="text/javascript">
-    $(document).ready(function(){
-      listAllProducts();  
-    });
-    function listAllProducts() {
-    $('.output-products').replaceWith('<tbody class="output-products"></tbody>')
-    $.getJSON('http://localhost:8080/products', function (data) {
-        $.each(data, function (index, product) {
+  $(document).ready(function () {
+    listAllProducts();
+  });
+  function listAllProducts() {
+    $(".output-products").replaceWith(
+      '<tbody class="output-products"></tbody>'
+    );
+    $.ajax({
+      type: "GET",
+      url: "http://localhost:8080/products",
+      xhrFields: {
+        withCredentials: true,
+      },
+    }).done(function (data) {
+      $.each(data, function (index, product) {
         var itemNumber = product.itemNumber;
         var name = product.name;
         var description = product.description;
@@ -14,291 +22,418 @@
         var price = product.price;
         var brand = product.brand.brandName;
         var category = product.category.categoryName;
-            $('.output-products').append('<tr><th class="category-id" scope="row">'+itemNumber+
-        '</th><td class="name">'+name+
-        '</td><td class="product-long-name">'+description+
-        '</td><td class="size">'+size+
-        '</td><td class="status">'+status+
-        '</td><td class="price">€ '+price+
-        '</td><td class="brand">'+brand+
-        '</td><td class="category">'+category+
-        '</td>'+
-        '<td><ul class="list-inline m-0"><li class="list-inline-item"><button class="btn btn-success btn-sm rounded-0"  onclick="showProductEditModal('+itemNumber+')" type="button" data-toggle="tooltip" data-placement="top" title="Bearbeiten"><ion-icon name="create-outline"></ion-icon></button></li><li class="list-inline-item"><button class="btn btn-danger btn-sm rounded-0" onclick="deleteProductByItemNumber('+itemNumber+')" type="button" data-toggle="tooltip" data-placement="top" title="Löschen"><ion-icon name="trash-outline"></ion-icon></button></li></ul></td>'
+        $(".output-products").append(
+          '<tr><th class="category-id" scope="row">' +
+            itemNumber +
+            '</th><td class="name">' +
+            name +
+            '</td><td class="product-long-name">' +
+            description +
+            '</td><td class="size">' +
+            size +
+            '</td><td class="status">' +
+            status +
+            '</td><td class="price">€ ' +
+            price +
+            '</td><td class="brand">' +
+            brand +
+            '</td><td class="category">' +
+            category +
+            "</td>" +
+            '<td><ul class="list-inline m-0"><li class="list-inline-item"><button class="btn btn-success btn-sm rounded-0"  onclick="showProductEditModal(' +
+            itemNumber +
+            ')" type="button" data-toggle="tooltip" data-placement="top" title="Bearbeiten"><ion-icon name="create-outline"></ion-icon></button></li><li class="list-inline-item"><button class="btn btn-danger btn-sm rounded-0" onclick="deleteProductByItemNumber(' +
+            itemNumber +
+            ')" type="button" data-toggle="tooltip" data-placement="top" title="Löschen"><ion-icon name="trash-outline"></ion-icon></button></li></ul></td>'
         );
+      });
     });
-    });
-}
-function showProductEditModal(itemNumber) {
-        getProductById(itemNumber).then((data)=>{
-        $('#product-itemNumber-edit').val(data.itemNumber),
-        $('#name-edit').val(data.name),
-        $('#product-long-name-edit').val(data.description),
-        $('#size-edit').val(data.size),
-        $('#status-edit').val(data.status),
-        $('#price-edit').val(data.price),
-        $('#brand-edit').val(data.brand.id),
-        $('#category-edit').val(data.category.id)
-    }).catch((err)=>{
-        console.log(err)
-    })
-     
-    var myModalEl2 = document.querySelector('#editProductModal')
-var modal = bootstrap.Modal.getOrCreateInstance(myModalEl2)
-         $('#editProductModal').modal('show');
- }
+  }
+  function showProductEditModal(itemNumber) {
+    getProductById(itemNumber)
+      .then((data) => {
+        $("#product-itemNumber-edit").val(data.itemNumber),
+          $("#name-edit").val(data.name),
+          $("#product-long-name-edit").val(data.description),
+          $("#size-edit").val(data.size),
+          $("#status-edit").val(data.status),
+          $("#price-edit").val(data.price),
+          $("#brand-edit").val(data.brand.id),
+          $("#category-edit").val(data.category.id);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
+    var myModalEl2 = document.querySelector("#editProductModal");
+    var modal = bootstrap.Modal.getOrCreateInstance(myModalEl2);
+    $("#editProductModal").modal("show");
+  }
 
- function getProductById(itemNumber) {
+  function getProductById(itemNumber) {
     return new Promise((resolve, reject) => {
-        resolve(
-            $.getJSON('http://localhost:8080/products/'+itemNumber, function (data) {
-                console.log("this is Data Promise",data)
-                    }),
-                    );
-      })       
-}
-
-
-function getCategoryById(id) {
-    return new Promise((resolve, reject) => {
-        resolve(
-          $.getJSON('http://localhost:8080/categories/'+id, function (data) {
-                console.log("this is Category",data)
-                    })
-                    )
-      })       
-}
-
-function deleteProductByItemNumber(itemNumber) {
-    $.ajax({
-        type: "DELETE",
-        url: 'http://localhost:8080/products/'+itemNumber,
-        dataType: "json",
-        statusCode: {
-            200: function() {
-            $('.output-products').replaceWith('<tbody class="output-products">'+listAllProducts()+'</tbody>')
-            },
-            500: function () {
-                $('#cannotDeleteModal').modal('show');
-            }
-          }
-    })
-}
-
-$(function() {
-    $('#product').submit(function(e) {
-        e.preventDefault();
-        product = {
-            "name":$("#name").val(),
-            "description":$("#product-long-name").val(),
-            "size":$("#size").val(),
-            "status" :$("#status").val(),
-            "price":$("#price").val(),
-            "brand": {
-            "id": $("#brand").val()
-            },
-            "category": {
-            "id": $("#category").val()
-        }
-       
-        };
-        console.log(product)
+      resolve(
         $.ajax({
-            type: "POST",
-            url: 'http://localhost:8080/products',
-            contentType: "application/json",
-            data: JSON.stringify(product),
-            statusCode: {
-                200: function() {
-                    $('#product')[0].reset();
-                    $('.output-products').replaceWith('<tbody class="output-products">'+listAllProducts()+'</tbody>')
-                    $('#message').hide();    
-            },
-                400 : () => {
-                    $('#message').show();
-                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder  alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>');
-            },
-                500 : ()=> {
-                  $('#duplicateModal').modal('show');
-                }
-              }
+          type: "GET",
+          url: "http://localhost:8080/products/" + itemNumber,
+          xhrFields: {
+            withCredentials: true,
+          },
+        }).done(function (data) {
+          return data;
         })
-    })
-})
-
-
-function insertCategoriesInForm() {
-    $.getJSON('http://localhost:8080/categories', function (data) {
-        $.each(data, function (index, category) {
-            var categoryId = category.id;
-            var categoryName = category.categoryName;
-            $('.categories').append('<option value="'+categoryId+'" class="category-name">'+ categoryName +'</option>');
-        });
+      );
     });
-}
-insertCategoriesInForm()
+  }
 
-
-function insertBrandsInForm() {
-    $.getJSON('http://localhost:8080/brands', function (data) {
-        $.each(data, function (index, brand) {
-            var brandId = brand.id;
-            var brandName = brand.brandName;
-            $('.brands').append('<option value="'+brandId+'" class="category-name">'+ brandName +'</option>');
-        });
-    });
-}
-insertBrandsInForm()
-
-
-$(document).ready(function() {
-    $('#product-edit').submit(function(e) {
-        e.preventDefault();
-        productToEdit = {
-            "itemNumber":$("#product-itemNumber-edit").val(),
-            "name":$("#name-edit").val(),
-            "description":$("#product-long-name-edit").val(),
-            "size":$("#size-edit").val(),
-            "status" :$("#status-edit").val(),
-            "price":$("#price-edit").val(),
-
-            "brand": {
-            "id": $("#brand-edit").val()
-            },
-            "category": {
-            "id": $("#category-edit").val()
-            }
-            };
+  function getCategoryById(id) {
+    return new Promise((resolve, reject) => {
+      resolve(
         $.ajax({
-            type: "PUT",
-            url: 'http://localhost:8080/products/'+productToEdit.itemNumber,
-            contentType: "application/json",
-            data: JSON.stringify(productToEdit),
-            statusCode: {
-                200: function() {
-                    $('#product-edit')[0].reset();
-                    $('.output-products').replaceWith('<tbody class="output-products">'+listAllProducts()+'</tbody>')
-                    $('#message').hide();    
-            },
-                400 : () => {
-                    $('#message').show();
-                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>');
-            },
-                500 : ()=> {
-                  $('#duplicateModal').modal('show');
-                }
-              }
-        });
+          type: "GET",
+          url: "http://localhost:8080/categories/" + id,
+          xhrFields: {
+            withCredentials: true,
+          },
+        }).done(function (data) {
+          return data;
+        })
+      );
     });
-});
+  }
 
-  </script>
+  function deleteProductByItemNumber(itemNumber) {
+    $.ajax({
+      type: "DELETE",
+      url: "http://localhost:8080/products/" + itemNumber,
+      xhrFields: {
+        withCredentials: true,
+      },
+      dataType: "json",
+      statusCode: {
+        200: function () {
+          $(".output-products").replaceWith(
+            '<tbody class="output-products">' + listAllProducts() + "</tbody>"
+          );
+        },
+        500: function () {
+          $("#cannotDeleteModal").modal("show");
+        },
+      },
+    });
+  }
 
+  $(function () {
+    $("#product").submit(function (e) {
+      e.preventDefault();
+      product = {
+        name: $("#name").val(),
+        description: $("#product-long-name").val(),
+        size: $("#size").val(),
+        status: $("#status").val(),
+        price: $("#price").val(),
+        brand: {
+          id: $("#brand").val(),
+        },
+        category: {
+          id: $("#category").val(),
+        },
+      };
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/products",
+        xhrFields: {
+          withCredentials: true,
+        },
+        contentType: "application/json",
+        data: JSON.stringify(product),
+        statusCode: {
+          200: function () {
+            $("#product")[0].reset();
+            $(".output-products").replaceWith(
+              '<tbody class="output-products">' + listAllProducts() + "</tbody>"
+            );
+            $("#message").hide();
+          },
+          400: () => {
+            $("#message").show();
+            $(".message-placeholder").replaceWith(
+              '<div id="message" class="message-placeholder  alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>'
+            );
+          },
+          500: () => {
+            $("#duplicateModal").modal("show");
+          },
+        },
+      });
+    });
+  });
+
+  function insertCategoriesInForm() {
+    $.ajax({
+      type: "GET",
+      url: "http://localhost:8080/categories",
+      xhrFields: {
+        withCredentials: true,
+      },
+    }).done(function (data) {
+      $.each(data, function (index, category) {
+        var categoryId = category.id;
+        var categoryName = category.categoryName;
+        $(".categories").append(
+          '<option value="' +
+            categoryId +
+            '" class="category-name">' +
+            categoryName +
+            "</option>"
+        );
+      });
+    });
+  }
+  insertCategoriesInForm();
+
+  function insertBrandsInForm() {
+    $.ajax({
+      type: "GET",
+      url: "http://localhost:8080/brands",
+      xhrFields: {
+        withCredentials: true,
+      },
+    }).done(function (data) {
+      $.each(data, function (index, brand) {
+        var brandId = brand.id;
+        var brandName = brand.brandName;
+        $(".brands").append(
+          '<option value="' +
+            brandId +
+            '" class="category-name">' +
+            brandName +
+            "</option>"
+        );
+      });
+    });
+  }
+  insertBrandsInForm();
+
+  $(document).ready(function () {
+    $("#product-edit").submit(function (e) {
+      e.preventDefault();
+      productToEdit = {
+        itemNumber: $("#product-itemNumber-edit").val(),
+        name: $("#name-edit").val(),
+        description: $("#product-long-name-edit").val(),
+        size: $("#size-edit").val(),
+        status: $("#status-edit").val(),
+        price: $("#price-edit").val(),
+
+        brand: {
+          id: $("#brand-edit").val(),
+        },
+        category: {
+          id: $("#category-edit").val(),
+        },
+      };
+      $.ajax({
+        type: "PUT",
+        url: "http://localhost:8080/products/" + productToEdit.itemNumber,
+        xhrFields: {
+          withCredentials: true,
+        },
+        contentType: "application/json",
+        data: JSON.stringify(productToEdit),
+        statusCode: {
+          200: function () {
+            $("#product-edit")[0].reset();
+            $(".output-products").replaceWith(
+              '<tbody class="output-products">' + listAllProducts() + "</tbody>"
+            );
+            $("#message").hide();
+          },
+          400: () => {
+            $("#message").show();
+            $(".message-placeholder").replaceWith(
+              '<div id="message" class="message-placeholder alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>'
+            );
+          },
+          500: () => {
+            $("#duplicateModal").modal("show");
+          },
+        },
+      });
+    });
+  });
+</script>
 
 <div id="products-partial" class="container-fluid">
-    <div class="col-12">
-      <div class="d-flex justify-content-center pageTitle">
-        <h1>Produkte</h1>
-      </div>
+  <div class="col-12">
+    <div class="d-flex justify-content-center pageTitle">
+      <h1>Produkte</h1>
     </div>
-    <div class="container">
-        
-        <!-- Create Modal -->
-        <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">
-                    Produkt erstellen
-                  </h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="container">
+    <!-- Create Modal -->
+    <div
+      class="modal fade"
+      id="createModal"
+      tabindex="-1"
+      aria-labelledby="createModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Produkt erstellen</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="product">
+              <div class="form-group">
+                <div class="mb-3">
+                  <label for="name" class="form-label">Beschreibung</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    required
+                  />
+                  <label for="product-long-name" class="form-label"
+                    >Langbeschreibung</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="product-long-name"
+                    name="product-long-name"
+                    required
+                  />
+                  <label for="size">Größe</label>
+                  <select class="form-control" id="size">
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
+                    <option>S</option>
+                    <option>M</option>
+                    <option>L</option>
+                    <option>XL</option>
+                    <option>XXL</option>
+                  </select>
+                  <label for="status">Status</label>
+                  <select class="form-control" id="status">
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="NOT_ACTIVE">Not Active</option>
+                  </select>
+                  <label for="price" class="form-label">Preis</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="price"
+                    name="price"
+                    required
+                  />
+
+                  <label for="brand">Marke</label>
+                  <select class="form-control brands" id="brand">
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
+                  </select>
+
+                  <label for="category">Kategorie</label>
+                  <select class="form-control categories" id="category">
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
+                  </select>
                 </div>
-                <div class="modal-body">
-  
-                    <form id="product">
-                        <div class="form-group">
-                          <div class="mb-3">
-                            <label for="name" class="form-label">Beschreibung</label>
-                            <input type="text" class="form-control" id="name" name="name"
-                              required />
-                            <label for="product-long-name" class="form-label">Langbeschreibung</label>
-                            <input type="text" class="form-control" id="product-long-name" name="product-long-name"
-                              required />
-                            <label for="size">Größe</label>
-                            <select class="form-control" id="size">
-                              <option disabled selected value>Eine Option auswählen</option>
-                              <option>S</option>
-                              <option>M</option>
-                              <option>L</option>
-                              <option>XL</option>
-                              <option>XXL</option>
-                            </select>
-                            <label for="status">Status</label>
-                            <select class="form-control" id="status">
-                              <option disabled selected value>Eine Option auswählen</option>
-                              <option value="ACTIVE">Active</option>
-                              <option value="NOT_ACTIVE">Not Active</option>
-                            </select>
-                            <label for="price" class="form-label">Preis</label>
-                            <input type="text" class="form-control" id="price" name="price" required />
-                            
-                            <label for="brand">Marke</label>
-                            <select class="form-control brands" id="brand">
-                                <option disabled selected value>Eine Option auswählen</option>
-                            </select>
-                            
-                            <label for="category">Kategorie</label>
-                            <select class="form-control categories" id="category">
-                                <option disabled selected value>Eine Option auswählen</option>
-                            </select>
-                            
-                          </div>
-                          <div class="row">
-                            <div class="col">
-                              <button type="submit" class="btn btn-primary">
-                                Erstellen
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
-                </div>
-                <div id="message" class="message-placeholder"></div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Schließen
-                  </button>
+                <div class="row">
+                  <div class="col">
+                    <button type="submit" class="btn btn-primary">
+                      Erstellen
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
-  
-          <!-- Edit Modal -->
-          <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">
-                    Produkt bearbeiten
-                  </h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form id="product-edit">
-                    <div class="form-group">
-                      <div class="mb-3">
-                        <label for="product-itemNumber-edit" class="form-label">Produkt-Id</label>
-                        <input type="text" class="form-control product-name-form" id="product-itemNumber-edit" name="product-itemNumber-edit"
-                        readonly />
-                        <label for="name-edit" class="form-label">Beschreibung</label>
-                         <input type="text" class="form-control" id="name-edit" name="name-edit"
-                    required />
-                  <label for="product-long-name-edit" class="form-label">Langbeschreibung</label>
-                  <input type="text" class="form-control" id="product-long-name-edit" name="product-long-name-edit"
-                    required />
+          <div id="message" class="message-placeholder"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Schließen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div
+      class="modal fade"
+      id="editProductModal"
+      tabindex="-1"
+      aria-labelledby="editModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Produkt bearbeiten</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="product-edit">
+              <div class="form-group">
+                <div class="mb-3">
+                  <label for="product-itemNumber-edit" class="form-label"
+                    >Produkt-Id</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control product-name-form"
+                    id="product-itemNumber-edit"
+                    name="product-itemNumber-edit"
+                    readonly
+                  />
+                  <label for="name-edit" class="form-label">Beschreibung</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name-edit"
+                    name="name-edit"
+                    required
+                  />
+                  <label for="product-long-name-edit" class="form-label"
+                    >Langbeschreibung</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="product-long-name-edit"
+                    name="product-long-name-edit"
+                    required
+                  />
                   <label for="size-edit">Größe</label>
                   <select class="form-control" id="size-edit">
-                    <option disabled selected value>Eine Option auswählen</option>
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
                     <option>S</option>
                     <option>M</option>
                     <option>L</option>
@@ -307,81 +442,52 @@ $(document).ready(function() {
                   </select>
                   <label for="status-edit">Status</label>
                   <select class="form-control" id="status-edit">
-                    <option disabled selected value>Eine Option auswählen</option>
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
                     <option value="ACTIVE">Active</option>
                     <option value="NOT_ACTIVE">Not Active</option>
                   </select>
                   <label for="price-edit" class="form-label">Preis</label>
-                  <input type="text" class="form-control" id="price-edit" name="price-edit" required />
-                  
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="price-edit"
+                    name="price-edit"
+                    required
+                  />
+
                   <label for="brand-edit">Marke</label>
-                  <select class="form-control brands" id="brand-edit">
-                  </select>
-                  
+                  <select class="form-control brands" id="brand-edit"></select>
+
                   <label for="category-edit">Kategorie</label>
-                  <select class="form-control categories" id="category-edit">
-                  </select>
-                      </div>
-                      
-                      <div class="row">
-                        <div class="col">
-                          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
-                            Bearbeiten
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
+                  <select
+                    class="form-control categories"
+                    id="category-edit"
+                  ></select>
                 </div>
-                <div id="message" class="message-placeholder"></div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Schließen
-                  </button>
+
+                <div class="row">
+                  <div class="col">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      data-bs-dismiss="modal"
+                    >
+                      Bearbeiten
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
-  
-          <!-- Cannot Detele Modal -->
-          <div class="modal fade" id="cannotDeleteModal" tabindex="-1" aria-labelledby="cannotDeleteModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="cannotDeleteModalLabel">
-                    Produkt Kann nicht gelöscht werden
-                  </h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  Diese Produkt wird von einem oder mehreren Produkten verwendet
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Schließen
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-  
-          <!-- Duplicate Modal -->
-      <div class="modal fade" id="duplicateModal" tabindex="-1" aria-labelledby="duplicateModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="duplicateModalLabel">
-              Doppelte Eingabe
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            dasselbe Produkt ist bereits vorhanden
-          </div>
+          <div id="message" class="message-placeholder"></div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
               Schließen
             </button>
           </div>
@@ -389,28 +495,105 @@ $(document).ready(function() {
       </div>
     </div>
 
-          <div class="row">
-            <table class="table">
-              <thead>
-                <tr>
-                    <th scope="col">Artikel#</th>
-                    <th scope="col">Beschreibung</th>
-                    <th scope="col">Langbeschreibung</th>
-                    <th scope="col">Größe</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Preis</th>
-                    <th scope="col">Marke</th>
-                    <th scope="col">Kategorie</th>
-                    <th scope="col">Aktionen</th>
-                </tr>
-              </thead>
-              <tbody class="output-products"></tbody>
-            </table>
+    <!-- Cannot Detele Modal -->
+    <div
+      class="modal fade"
+      id="cannotDeleteModal"
+      tabindex="-1"
+      aria-labelledby="cannotDeleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cannotDeleteModalLabel">
+              Produkt Kann nicht gelöscht werden
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
-          <div class="row">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-              Produkt erstellen
+          <div class="modal-body">
+            Diese Produkt wird von einem oder mehreren Produkten verwendet
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Schließen
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Duplicate Modal -->
+    <div
+      class="modal fade"
+      id="duplicateModal"
+      tabindex="-1"
+      aria-labelledby="duplicateModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="duplicateModalLabel">
+              Doppelte Eingabe
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">dasselbe Produkt ist bereits vorhanden</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Schließen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Artikel#</th>
+            <th scope="col">Beschreibung</th>
+            <th scope="col">Langbeschreibung</th>
+            <th scope="col">Größe</th>
+            <th scope="col">Status</th>
+            <th scope="col">Preis</th>
+            <th scope="col">Marke</th>
+            <th scope="col">Kategorie</th>
+            <th scope="col">Aktionen</th>
+          </tr>
+        </thead>
+        <tbody class="output-products"></tbody>
+      </table>
+    </div>
+    <div class="row">
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#createModal"
+      >
+        Produkt erstellen
+      </button>
     </div>
   </div>
+</div>

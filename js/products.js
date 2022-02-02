@@ -1,5 +1,5 @@
 function listActiveProducts() {
-$.getJSON('http://localhost:8080/products/activeproducts', function (data) {
+$.getJSON('http://localhost:8080/activeproducts', function (data) {
     $.each(data,function (index, product) {
         itemNumber = product.itemNumber;
         description = product.description;
@@ -39,75 +39,3 @@ $.getJSON('http://localhost:8080/products/activeproducts', function (data) {
 });
 }
 listActiveProducts();
-
-$(document).ready(function() {
-    $('#product').submit(function(e) {
-        e.preventDefault();
-        product = {
-            "description":$("#product-description").val(),
-            "productLongDescription":$("#product-long-description").val(),
-            "size":$("#size").val(),
-            "status" :$("#status").val(),
-            "price":$("#price").val(),
-            "brand":$("#brand").val(),
-            "category":$("#category").val()
-        };
-        $.ajax({
-            type: "POST",
-            url: 'http://localhost:8080/products',
-            dataType: "json",
-            //contentType: 'application/x-www-form-urlencoded',
-            data: product,
-            statusCode: {
-                200: function() {
-                $('#product')[0].reset();
-                $('.output').replaceWith('<tbody class="output">'+listAllProducts()+'</tbody>')
-                },
-                400 : function name(params) {
-                    $('.error').append('Something went wrong, please check your input and try again');
-                },
-                500 : function name(params) {
-                    $('.error').append('Duplicated ! Please check your input and try again');
-
-                },
-
-              }
-        });
-    });
-    
-})
-function insertCategoriesInForm() {
-    $.getJSON('http://localhost:8080/categories', function (data) {
-        $.each(data, function (index, category) {
-            var categoryId = category.id;
-            var categoryName = category.categoryName;
-            $('.categories').append('<option value="'+categoryId+'" class="category-name">'+ categoryName +'</option>');
-        });
-    });
-}
-insertCategoriesInForm()
-
-
-function insertBrandsInForm() {
-    $.getJSON('http://localhost:8080/brands', function (data) {
-        $.each(data, function (index, brand) {
-            var brandId = brand.id;
-            var brandName = brand.brandName;
-            $('.brands').append('<option value="'+brandId+'" class="category-name">'+ brandName +'</option>');
-        });
-    });
-}
-insertBrandsInForm()
-
-function deleteProductByItemNumber(itemNumber) {
-    $.ajax({
-        type: "DELETE",
-        url: 'http://localhost:8080/products/'+itemNumber,
-        dataType: "json",
-        statusCode: {
-            200: function() {
-            $('.output').replaceWith('<tbody class="output">'+listAllProducts()+'</tbody>')
-            }
-          }
-    })
-}

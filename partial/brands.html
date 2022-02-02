@@ -6,7 +6,13 @@
 
   function listAllBrands() {
         $('.output-brands').replaceWith('<tbody class="output-brands"></tbody>')
-    $.getJSON('http://localhost:8080/brands', function (data) {
+        $.ajax({
+      type: "GET",
+      url: "http://localhost:8080/brands",
+      xhrFields: {
+        withCredentials: true,
+      },
+    }).done( function (data) {
         $.each(data, function (index, brand) {
             var id = brand.id;
             var brandName = brand.brandName;
@@ -38,10 +44,16 @@ var modal = bootstrap.Modal.getOrCreateInstance(myModalEl)
 function getBrandById(id) {
     return new Promise((resolve, reject) => {
         resolve(
-            $.getJSON('http://localhost:8080/brands/'+id, function (data) {
-                console.log("this is Data Promise",data)
-                    }),
-                    );
+          $.ajax({
+          type: "GET",
+          url: "http://localhost:8080/brands/" + id,
+          xhrFields: {
+            withCredentials: true,
+          },
+        }).done(function (data) {
+          return data;
+        })
+      );
       })       
 }
 
@@ -49,6 +61,9 @@ function deleteBrandById(id) {
     $.ajax({
         type: "DELETE",
         url: 'http://localhost:8080/brands/'+id,
+        xhrFields: {
+        withCredentials: true,
+      },
         dataType: "json",
         statusCode: {
             200: function() {
@@ -68,6 +83,9 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: 'http://localhost:8080/brands',
+            xhrFields: {
+            withCredentials: true,
+            },
             contentType: "application/json",
             data: JSON.stringify(brand),
             statusCode: {
@@ -93,10 +111,12 @@ $(document).ready(function() {
         e.preventDefault();
         brandToEdit = {"id":$("#brand-id-edit").val(),
                 "brandName":$("#brand-name-edit").val()};
-                console.log("Here We are",brandToEdit)
         $.ajax({
             type: "PUT",
             url: 'http://localhost:8080/brands/'+brandToEdit.id,
+            xhrFields: {
+            withCredentials: true,
+            },
             contentType: "application/json",
             data: JSON.stringify(brandToEdit),
             statusCode: {

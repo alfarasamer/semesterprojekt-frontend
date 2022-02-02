@@ -1,11 +1,18 @@
 <script type="text/javascript">
-    $(document).ready(function(){
-      listAllUsers();  
-    });
-    function listAllUsers() {
-    $('.output-users').replaceWith('<tbody class="output-users"></tbody>')
-    $.getJSON('http://localhost:8080/users', function (data) {
-        $.each(data, function (index, user) {
+  $(document).ready(function () {
+    listAllUsers();
+  });
+  function listAllUsers() {
+    $(".output-users").replaceWith('<tbody class="output-users"></tbody>');
+
+    $.ajax({
+      type: "GET",
+      url: "http://localhost:8080/users",
+      xhrFields: {
+        withCredentials: true,
+      },
+    }).done(function (data) {
+      $.each(data, function (index, user) {
         var id = user.id;
         var firstName = user.firstName;
         var lastName = user.lastName;
@@ -14,327 +21,460 @@
         var role = user.role;
         var locked = user.locked;
         var enabled = user.enabled;
-
-            $('.output-users').append('<tr><th class="user-id" scope="row">'+id+
-        '</th><td class="firstName">'+firstName+
-        '</td><td class="lastName">'+lastName+
-        '</td><td class="username">'+username+
-        //'</td><td class="password">'+password+
-        '</td><td class="role">'+role+
-        '</td><td class="locked">'+locked+
-        '</td><td class="enabled">'+enabled+
-        '</td>'+
-        '<td><ul class="list-inline m-0"><li class="list-inline-item"><button class="btn btn-success btn-sm rounded-0"  onclick="showUserEditModal('+id+')" type="button" data-toggle="tooltip" data-placement="top" title="Bearbeiten"><ion-icon name="create-outline"></ion-icon></button></li><li class="list-inline-item"><button class="btn btn-danger btn-sm rounded-0" onclick="deleteUserById('+id+')" type="button" data-toggle="tooltip" data-placement="top" title="Löschen"><ion-icon name="trash-outline"></ion-icon></button></li></ul></td>'
+        $(".output-users").append(
+          '<tr><th class="user-id" scope="row">' +
+            id +
+            '</th><td class="firstName">' +
+            firstName +
+            '</td><td class="lastName">' +
+            lastName +
+            '</td><td class="username">' +
+            username +
+            //'</td><td class="password">'+password+
+            '</td><td class="role">' +
+            role +
+            '</td><td class="locked">' +
+            locked +
+            '</td><td class="enabled">' +
+            enabled +
+            "</td>" +
+            '<td><ul class="list-inline m-0"><li class="list-inline-item"><button class="btn btn-success btn-sm rounded-0"  onclick="showUserEditModal(' +
+            id +
+            ')" type="button" data-toggle="tooltip" data-placement="top" title="Bearbeiten"><ion-icon name="create-outline"></ion-icon></button></li><li class="list-inline-item"><button class="btn btn-danger btn-sm rounded-0" onclick="deleteUserById(' +
+            id +
+            ')" type="button" data-toggle="tooltip" data-placement="top" title="Löschen"><ion-icon name="trash-outline"></ion-icon></button></li></ul></td>'
         );
+      });
     });
-    });
-}
+  }
 
+  function showUserEditModal(id) {
+    getUserById(id)
+      .then((data) => {
+        $("#id-edit").val(data.id),
+          $("#first-name-edit").val(data.firstName),
+          $("#last-name-edit").val(data.lastName),
+          $("#user-name-edit").val(data.username),
+          $("#role-edit").val(data.role),
+          $("#locked-edit").val(data.locked),
+          $("#enabled-edit").val(data.enabled);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-function showUserEditModal(id) {
-        getUserById(id).then((data)=>{
-          console.log(data)
-          console.log("locked: ",data.locked," enabled ",data.enabled )
-        $('#id-edit').val(data.id),
-        $('#first-name-edit').val(data.firstName),
-        $('#last-name-edit').val(data.lastName),
-        $('#user-name-edit').val(data.username),
-        $('#role-edit').val(data.role),
-        $('#locked-edit').val(data.locked),
-        $('#enabled-edit').val(data.enabled)
-    }).catch((err)=>{
-        console.log(err)
-    })
-     
-    var myModalEl3 = document.querySelector('#editUserModal')
-var modal = bootstrap.Modal.getOrCreateInstance(myModalEl3)
+    var myModalEl3 = document.querySelector("#editUserModal");
+    var modal = bootstrap.Modal.getOrCreateInstance(myModalEl3);
 
-   
-         $('#editUserModal').modal('show');
- }
+    $("#editUserModal").modal("show");
+  }
 
-
- function getUserById(id) {
+  function getUserById(id) {
     return new Promise((resolve, reject) => {
-        resolve(
-            $.getJSON('http://localhost:8080/users/'+id, function (data) {
-                console.log("this is Data Promise",data)
-                    }),
-                    );
-      })       
-}
-
-function deleteUserById(id) {
-    $.ajax({
-        type: "DELETE",
-        url: 'http://localhost:8080/users/'+id,
-        dataType: "json",
-        statusCode: {
-            200: function() {
-            $('.output-users').replaceWith('<tbody class="output-users">'+listAllUsers()+'</tbody>')
-            },
-            500: function () {
-                $('#cannotDeleteModal').modal('show');
-            }
-          }
-    })
-}
-
-$(function() {
-    $('#user').submit(function(e) {
-        e.preventDefault();
-        user = {
-            "firstName":$("#first-name").val(),
-            "lastName":$("#last-name").val(),
-            "username" :$("#user-name").val(),
-            "password":$("#password").val(),
-            "role":$("#role").val(),
-            "locked":$("#locked").val(),
-            "enabled":$("#enabled").val() 
-        };
+      resolve(
         $.ajax({
-            type: "POST",
-            url: 'http://localhost:8080/users',
-            contentType: "application/json",
-            data: JSON.stringify(user),
-            statusCode: {
-                200: function() {
-                    $('#user')[0].reset();
-                    $('.output-users').replaceWith('<tbody class="output-users">'+listAllUsers()+'</tbody>')
-                    $('#message').hide();    
-            },
-                400 : () => {
-                    $('#message').show();
-                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>');
-            },
-                500 : ()=> {
-                    $('#message').show();
-                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder alert alert-danger">Diese Benutzer gibt es bereits! Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es erneut</div>');
-                }
-              }
+          type: "GET",
+          url: "http://localhost:8080/users/" + id,
+          xhrFields: {
+            withCredentials: true,
+          },
+        }).done(function (data) {
+          return data;
         })
-    })
-})
-
-$(document).ready(function() {
-    $('#user-edit').submit(function(e) {
-        e.preventDefault();
-        id = $('#id-edit').val();
-        userToEdit = {       
-            "firstName":$("#first-name-edit").val(),
-            "lastName":$("#last-name-edit").val(),
-            "role":$("#role-edit").val(),
-            "locked":$("#locked-edit").val(),
-            "enabled":$("#enabled-edit").val()
-            };
-            console.log("Here We are",userToEdit)
-        $.ajax({
-            type: "PUT",
-            url: 'http://localhost:8080/users/'+id,
-            contentType: "application/json",
-            data: JSON.stringify(userToEdit),
-            statusCode: {
-                200: function() {
-                    $('#user-edit')[0].reset();
-                    $('.output-users').replaceWith('<tbody class="output-user">'+listAllUsers()+'</tbody>')
-                    $('#message').hide();    
-            },
-                400 : () => {
-                    $('#message').show();
-                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>');
-            },
-                500 : ()=> {
-                    $('#message').show();
-                    $('.message-placeholder').replaceWith('<div id="message" class="message-placeholder alert alert-danger">Diese Benutzer gibt es bereits! Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es erneut</div>');
-                }
-              }
-        });
+      );
     });
-});
+  }
 
-  </script>
+  function deleteUserById(id) {
+    $.ajax({
+      type: "DELETE",
+      url: "http://localhost:8080/users/" + id,
+      xhrFields: {
+        withCredentials: true,
+      },
+      dataType: "json",
+      statusCode: {
+        200: function () {
+          $(".output-users").replaceWith(
+            '<tbody class="output-users">' + listAllUsers() + "</tbody>"
+          );
+        },
+        500: function () {
+          $("#cannotDeleteModal").modal("show");
+        },
+      },
+    });
+  }
 
+  $(function () {
+    $("#user").submit(function (e) {
+      e.preventDefault();
+      user = {
+        firstName: $("#first-name").val(),
+        lastName: $("#last-name").val(),
+        username: $("#user-name").val(),
+        password: $("#password").val(),
+        role: $("#role").val(),
+        locked: $("#locked").val(),
+        enabled: $("#enabled").val(),
+      };
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/users",
+        xhrFields: {
+          withCredentials: true,
+        },
+        contentType: "application/json",
+        data: JSON.stringify(user),
+
+        statusCode: {
+          200: function () {
+            $("#user")[0].reset();
+            $(".output-users").replaceWith(
+              '<tbody class="output-users">' + listAllUsers() + "</tbody>"
+            );
+            $("#message").hide();
+          },
+          400: () => {
+            $("#message").show();
+            $(".message-placeholder").replaceWith(
+              '<div id="message" class="message-placeholder alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>'
+            );
+          },
+          500: () => {
+            $("#message").show();
+            $(".message-placeholder").replaceWith(
+              '<div id="message" class="message-placeholder alert alert-danger">Diese Benutzer gibt es bereits! Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es erneut</div>'
+            );
+          },
+        },
+      });
+    });
+  });
+
+  $(document).ready(function () {
+    $("#user-edit").submit(function (e) {
+      e.preventDefault();
+      id = $("#id-edit").val();
+      userToEdit = {
+        firstName: $("#first-name-edit").val(),
+        lastName: $("#last-name-edit").val(),
+        role: $("#role-edit").val(),
+        locked: $("#locked-edit").val(),
+        enabled: $("#enabled-edit").val(),
+      };
+      $.ajax({
+        type: "PUT",
+        url: "http://localhost:8080/users/" + id,
+        xhrFields: {
+          withCredentials: true,
+        },
+        contentType: "application/json",
+
+        data: JSON.stringify(userToEdit),
+        statusCode: {
+          200: function () {
+            $("#user-edit")[0].reset();
+            $(".output-users").replaceWith(
+              '<tbody class="output-user">' + listAllUsers() + "</tbody>"
+            );
+            $("#message").hide();
+          },
+          400: () => {
+            $("#message").show();
+            $(".message-placeholder").replaceWith(
+              '<div id="message" class="message-placeholder alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>'
+            );
+          },
+          500: () => {
+            $("#message").show();
+            $(".message-placeholder").replaceWith(
+              '<div id="message" class="message-placeholder alert alert-danger">Diese Benutzer gibt es bereits! Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es erneut</div>'
+            );
+          },
+        },
+      });
+    });
+  });
+</script>
 
 <div id="users-partial" class="container-fluid">
-    <div class="col-12">
-      <div class="d-flex justify-content-center pageTitle">
-        <h1>Benutzer</h1>
-      </div>
-    </div>
-    <div class="container">
-        <!-- Create Modal -->
-        <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">
-                    Benutzer erstellen
-                  </h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-  
-                    <form id="user">
-                        <div class="form-group">
-                          <div class="mb-3">
-                            <label for="first-name" class="form-label">Vorname</label>
-                            <input type="text" class="form-control" id="first-name" name="first-name"
-                              required />
-                              <label for="last-name" class="">Nachname</label>
-                            <input type="text" class="form-control" id="last-name" name="last-name"
-                              required />
-                              <label for="user-name" class="">Email</label>
-                            <input type="text" class="form-control" id="user-name" name="user-name"
-                              required />
-                              <label for="password" class="">Kennwort</label>
-                            <input type="text" class="form-control" id="password" name="password"
-                              required />
-                              <label for="role">Rolle</label>  
-                            <select class="form-control" id="role">
-                              <option disabled selected value>Eine Option auswählen</option>
-                              <option value="ROLE_USER">User</option>
-                              <option value="ROLE_ADMIN">Admin</option>
-                            </select>
-                                <label for="locked">Locked</label>  
-                            <select class="form-control" id="locked">
-                              <option disabled selected value>Eine Option auswählen</option>
-                              <option value="true">Locked</option>
-                              <option value="false">Not Locked</option>
-                            </select>
-                                <label for="enabled">Enabled</label>  
-                            <select class="form-control" id="enabled">
-                              <option disabled selected value>Eine Option auswählen</option>
-                              <option value="true">Enabled</option>
-                              <option value="false">Not Enabled</option>
-                            </select>
-                          </div>
-                          <div class="row">
-                            <div class="col">
-                              <button type="submit" class="btn btn-primary">
-                                Erstellen
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
-                </div>
-                <div id="message" class="message-placeholder"></div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Schließen
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-  
-          <!-- Edit Modal -->
-          <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">
-                    Benutzer bearbeiten
-                  </h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form id="user-edit">
-                    <div class="form-group">
-                      <div class="mb-3">
-                        <label for="id-edit" class="form-label">Id</label>
-                        <input type="text" class="form-control" id="id-edit" name="id-edit"
-                        disabled />  
-                        <label for="first-name-edit" class="form-label">Vorname</label>
-                        <input type="text" class="form-control" id="first-name-edit" name="first-name-edit"
-                          required />
-                          <label for="last-name-edit" class="">Nachname</label>
-                        <input type="text" class="form-control" id="last-name-edit" name="last-name-edit"
-                          required />
-                          <label for="role-edit">Rolle</label>  
-                        <select class="form-control" id="role-edit">
-                          <option disabled selected value>Eine Option auswählen</option>
-                          <option value="ROLE_USER">User</option>
-                          <option value="ROLE_ADMIN">Admin</option>
-                        </select>
-                            <label for="locked-edit">Locked</label>  
-                        <select class="form-control" id="locked-edit">
-                          <option disabled selected value>Eine Option auswählen</option>
-                          <option value=true>Locked</option>
-                          <option value=false>Not Locked</option>
-                        </select>
-                            <label for="enabled-edit">Enabled</label>  
-                        <select class="form-control" id="enabled-edit">
-                          <option disabled selected value>Eine Option auswählen</option>
-                          <option value= true >Enabled</option>
-                          <option value= false >Not Enabled</option>
-                        </select>
-                      </div>
-                      
-                      <div class="row">
-                        <div class="col">
-                          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
-                            Bearbeiten
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                <div id="message" class="message-placeholder"></div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Schließen
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-  
-          <!-- Cannot Detele Modal -->
-          <div class="modal fade" id="cannotDeleteModal" tabindex="-1" aria-labelledby="cannotDeleteModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="cannotDeleteModalLabel">
-                    Benutzer Kann nicht gelöscht werden
-                  </h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  Diese Benutzer hat eine oder mehrere Bestellungen
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Schließen
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-  
-          <div class="row">
-            <table class="table">
-              <thead>
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Vorname</th>
-                    <th scope="col">Nachname</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Rolle</th>
-                    <th scope="col">Locked</th>
-                    <th scope="col">Aktive</th>
-                    <th scope="col">Aktionen</th>
-                </tr>
-              </thead>
-              <tbody class="output-users"></tbody>
-            </table>
-          </div>
-          <div class="row">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-              Benutzer erstellen
-            </button>
-          </div>
+  <div class="col-12">
+    <div class="d-flex justify-content-center pageTitle">
+      <h1>Benutzer</h1>
     </div>
   </div>
+  <div class="container">
+    <!-- Create Modal -->
+    <div
+      class="modal fade"
+      id="createModal"
+      tabindex="-1"
+      aria-labelledby="createModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Benutzer erstellen</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="user">
+              <div class="form-group">
+                <div class="mb-3">
+                  <label for="first-name" class="form-label">Vorname</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="first-name"
+                    name="first-name"
+                    required
+                  />
+                  <label for="last-name" class="">Nachname</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="last-name"
+                    name="last-name"
+                    required
+                  />
+                  <label for="user-name" class="">Email</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="user-name"
+                    name="user-name"
+                    required
+                  />
+                  <label for="password" class="">Kennwort</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    required
+                  />
+                  <label for="role">Rolle</label>
+                  <select class="form-control" id="role">
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
+                    <option value="ROLE_USER">User</option>
+                    <option value="ROLE_ADMIN">Admin</option>
+                  </select>
+                  <label for="locked">Locked</label>
+                  <select class="form-control" id="locked">
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
+                    <option value="true">Locked</option>
+                    <option value="false">Not Locked</option>
+                  </select>
+                  <label for="enabled">Enabled</label>
+                  <select class="form-control" id="enabled">
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
+                    <option value="true">Enabled</option>
+                    <option value="false">Not Enabled</option>
+                  </select>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <button type="submit" class="btn btn-primary">
+                      Erstellen
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="message" class="message-placeholder"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Schließen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div
+      class="modal fade"
+      id="editUserModal"
+      tabindex="-1"
+      aria-labelledby="editModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Benutzer bearbeiten</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="user-edit">
+              <div class="form-group">
+                <div class="mb-3">
+                  <label for="id-edit" class="form-label">Id</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="id-edit"
+                    name="id-edit"
+                    disabled
+                  />
+                  <label for="first-name-edit" class="form-label"
+                    >Vorname</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="first-name-edit"
+                    name="first-name-edit"
+                    required
+                  />
+                  <label for="last-name-edit" class="">Nachname</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="last-name-edit"
+                    name="last-name-edit"
+                    required
+                  />
+                  <label for="role-edit">Rolle</label>
+                  <select class="form-control" id="role-edit">
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
+                    <option value="ROLE_USER">User</option>
+                    <option value="ROLE_ADMIN">Admin</option>
+                  </select>
+                  <label for="locked-edit">Locked</label>
+                  <select class="form-control" id="locked-edit">
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
+                    <option value="true">Locked</option>
+                    <option value="false">Not Locked</option>
+                  </select>
+                  <label for="enabled-edit">Enabled</label>
+                  <select class="form-control" id="enabled-edit">
+                    <option disabled selected value>
+                      Eine Option auswählen
+                    </option>
+                    <option value="true">Enabled</option>
+                    <option value="false">Not Enabled</option>
+                  </select>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      data-bs-dismiss="modal"
+                    >
+                      Bearbeiten
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="message" class="message-placeholder"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Schließen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cannot Detele Modal -->
+    <div
+      class="modal fade"
+      id="cannotDeleteModal"
+      tabindex="-1"
+      aria-labelledby="cannotDeleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cannotDeleteModalLabel">
+              Benutzer Kann nicht gelöscht werden
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Diese Benutzer hat eine oder mehrere Bestellungen
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Schließen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Vorname</th>
+            <th scope="col">Nachname</th>
+            <th scope="col">Email</th>
+            <th scope="col">Rolle</th>
+            <th scope="col">Locked</th>
+            <th scope="col">Aktive</th>
+            <th scope="col">Aktionen</th>
+          </tr>
+        </thead>
+        <tbody class="output-users"></tbody>
+      </table>
+    </div>
+    <div class="row">
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#createModal"
+      >
+        Benutzer erstellen
+      </button>
+    </div>
+  </div>
+</div>

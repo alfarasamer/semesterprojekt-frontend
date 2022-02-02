@@ -1,0 +1,76 @@
+<script type="text/javascript">
+  $(document).ready(function () {
+    getUserByToken();
+  });
+
+let token = sessionStorage.getItem("token");
+tokenJson = JSON.parse(atob(token));
+userToken = tokenJson.token;
+console.log("this is the roken",userToken)
+
+  function getUserByToken(token) {
+    return new Promise((resolve, reject) => {
+      resolve(
+        $.ajax({
+          type: "GET",
+          url: "http://localhost:8080/users/token/" + token,
+          xhrFields: {
+            withCredentials: true,
+          },
+        }).done(function (data) {
+          return data;
+        })
+      );
+    });
+  }
+getUserByToken(userToken).then((user)=>{
+  console.log("this is user",user)
+
+        var id = user.id;
+        var firstName = user.firstName;
+        var lastName = user.lastName;
+        var username = user.username;
+        var password = user.password;
+        var role = user.role;
+        var locked = user.locked;
+        var enabled = user.enabled;
+        $(".output-users").append(
+          '<tr><td class="firstName">' +
+            firstName +
+            '</td><td class="lastName">' +
+            lastName +
+            '</td><td class="username">' +
+            username +
+            '</td><td class="locked">' +
+            locked +
+            '</td><td class="enabled">' +
+            enabled +
+            '</td>'
+        );
+})
+
+</script>
+
+<div id="users-partial" class="container-fluid">
+  <div class="col-12">
+    <div class="d-flex justify-content-center pageTitle">
+      <h1>Kunde Profil</h1>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Vorname</th>
+            <th scope="col">Nachname</th>
+            <th scope="col">Email</th>
+            <th scope="col">Locked</th>
+            <th scope="col">Aktive</th>
+          </tr>
+        </thead>
+        <tbody class="output-users"></tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -10,7 +10,7 @@ function checkAccessRights() {
     role = tokenJson.role;
     tokenContent = tokenJson.token;
     }
-    if (role !="ROLE_ADMIN") {
+    if (role !="ROLE_USER") {
         window.location.replace('/forbidden.html');
     }
     

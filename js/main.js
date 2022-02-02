@@ -9,14 +9,38 @@ async function getSessionStorage() {
     try {
         let token = sessionStorage.getItem("token");
         tokenJson = JSON.parse(atob(token));
-        console.log("TokenJSON", tokenJson);
         role = tokenJson.role;
         tokenContent = tokenJson.token;
         if (role != 'ROLE_ADMIN') {
             document.getElementById('admin').style.display = 'none';
+        }else if (role != 'ROLE_USER') {
+            document.getElementById('customer').style.display = 'none';
         }
-        console.log("Role", role)
-        console.log("Token Content", tokenContent)
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('register').style.display = 'none';
+    } catch (error) {
+        document.getElementById('logout').style.display = 'none';
+        document.getElementById('login').style.display = 'flex';
+        document.getElementById('register').style.display = 'flex';
+        document.getElementById('admin').style.display = 'none';
+        document.getElementById('customer').style.display = 'none';
+    }
+}
+
+
+async function chechIfCustomerLoggedIn() {
+    try {
+        console.log("Hello")
+
+        let token2 = sessionStorage.getItem("token");
+        tokenJson = JSON.parse(atob(token2));
+        role = tokenJson.role;
+        tokenContent = tokenJson.token;
+        console.log(tokenContent)
+        if (role != 'ROLE_USER') {
+            document.getElementById('customer').style.display = 'none';
+        }
+
         document.getElementById('login').style.display = 'none';
         document.getElementById('register').style.display = 'none';
     } catch (error) {
@@ -47,21 +71,3 @@ function logout() {
   }
 
   $( "#logout" ).on( "click", logout );
-
-
-
-/*
-
-
-logout.addEventListener('submit', (event) => {
-    event.preventDefault(); //stop reload
-
-    let input = document.querySelector('logout');
-    console.log("Logout is clicked")
-    let method = 'GET';
-    let endpoint = `http://localhost:8080/logout`;
-
-    xhr.open(method, endpoint);
-    xhr.send(); //if in the link what you looking for this send will be empty!!!
-});
-*/

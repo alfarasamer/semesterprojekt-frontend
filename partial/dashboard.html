@@ -4,8 +4,13 @@
   });
 
 function getCounts() {
-
-  $.getJSON('http://localhost:8080/counts', function (counts) {
+  $.ajax({
+      type: "GET",
+      url: "http://localhost:8080/counts",
+      xhrFields: {
+        withCredentials: true,
+      },
+    }).done( function (counts) {
       $('.brands-count').replaceWith('<div class="count-number brands-count" id="brands-count">' + counts.brandsCount + '</div>');
       $('.products-count').replaceWith('<div class="count-number products-count" id="products-count">' + counts.productsCount + '</div>');
       $('.categories-count').replaceWith('<div class="count-number categories-count" id="categories-count">' + counts.categoriesCount+ '</div>');
