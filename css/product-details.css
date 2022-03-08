@@ -1,0 +1,168 @@
+.card {
+    margin-bottom: 30px;
+}
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid transparent;
+    border-radius: 0;
+}
+.card .card-subtitle {
+    font-weight: 300;
+    margin-bottom: 10px;
+    color: #8898aa;
+}
+.img-responsive{
+    max-width: 100%;
+}
+
+.inkl{
+    font-size: medium;
+    color: #8898aa;
+}
+.size-s{
+    text-align: center;
+    background: rgb(255, 143, 143);
+    width: fit-content;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    border-radius: 100px;
+    color: white;
+}
+.size-m{
+    text-align: center;
+    background: rgb(255, 114, 114);
+    width: fit-content;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    border-radius: 100px;
+    color: white;
+}
+.size-l{
+    text-align: center;
+    background: rgb(255, 78, 78);
+    width: fit-content;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    border-radius: 100px;
+    color: white;
+}
+.size-xl{
+    text-align: center;
+    background: rgb(255, 25, 25);
+    width: fit-content;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    border-radius: 100px;
+    color: white;
+}
+.size-xxl{
+    text-align: center;
+    background: red;
+    width: fit-content;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    border-radius: 100px;
+    color: white;
+}
+.box-title{
+    color: white;
+    background-image: linear-gradient(to right, #0d6efd , blue);
+    padding-top: 10px;
+    padding-bottom: 13px;
+    padding-left: 40px;
+    border-radius: 50px 0px 50px 0px;
+    margin-right: 20%;
+}
+.box-content{
+    margin-left: 50px;
+}
+
+/* General button style */
+.add-to-cart {
+    border: none;
+
+    cursor: pointer;
+    padding: 25px 80px;
+    display: inline-block;
+    margin: 15px 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    outline: none;
+    position: relative;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+  }
+  
+  .add-to-cart:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+  }
+  
+  /* Pseudo elements for icons */
+  .add-to-cart:before {
+    font-family: 'FontAwesome';
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  .btn-sep {
+    padding: 25px 60px 25px 120px;
+  }
+  
+  .btn-sep:before {
+    background: rgba(0,0,0,0.15);
+  }
+
+  .cart {
+    background: #c00808;
+    color: #fff;
+  }
+  
+  .cart:hover {
+    background: #27ae60;
+  }
+  
+  .cart:active {
+    background: #27ae60;
+    top: 2px;
+  }
+  
+  .cart:before {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    top: 0;
+    line-height: 3;
+    font-size: 140%;
+    width: 60px;
+  }  
+  .icon-cart:before {
+    content: "\f07a";
+  }

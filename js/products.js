@@ -27,15 +27,20 @@ $.getJSON('http://localhost:8080/activeproducts', function (data) {
                   '<span class="size-'+sizeCSSClass+'">'+size+'</span>'+
                 '</div>'+
               '</div>'+
-              '<div class="p-3 cursor view-button text-center text-white mt-3 coursor">'+
-                '<span class="cursor button-text text-uppercase">Jetzt bestellen</span>'+
+              '<div class="product-details p-3 cursor view-button text-center text-white mt-3 coursor" onclick="openDetailsPage('+itemNumber+')">'+
+                '<span class="cursor button-text text-uppercase">Mehr erfahren</span>'+
               '</div>'+
               '</div>'+
               '</div>'
         );
-    
-
     });
 });
 }
+//<button class="btn btn-danger btn-sm rounded-0" onclick="deleteBrandById('+id+')" type="button" data-toggle="tooltip" data-placement="top" title="Löschen"><ion-icon name="trash-outline"></ion-icon></button>
 listActiveProducts();
+
+function openDetailsPage(itemNumber) {
+  window.location = '/product-details.html?item-number=' + itemNumber;
+
+  console.log("open details page"+itemNumber);
+}

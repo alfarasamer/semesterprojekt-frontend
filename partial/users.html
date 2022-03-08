@@ -2,6 +2,7 @@
   $(document).ready(function () {
     listAllUsers();
   });
+
   function listAllUsers() {
     $(".output-users").replaceWith('<tbody class="output-users"></tbody>');
 
@@ -40,7 +41,11 @@
             "</td>" +
             '<td><ul class="list-inline m-0"><li class="list-inline-item"><button class="btn btn-success btn-sm rounded-0"  onclick="showUserEditModal(' +
             id +
-            ')" type="button" data-toggle="tooltip" data-placement="top" title="Bearbeiten"><ion-icon name="create-outline"></ion-icon></button></li><li class="list-inline-item"><button class="btn btn-danger btn-sm rounded-0" onclick="deleteUserById(' +
+            ')" type="button" data-toggle="tooltip" data-placement="top" title="Bearbeiten"><ion-icon name="create-outline"></ion-icon></button></li>'+
+            '<li class="list-inline-item"><button class="btn btn-success btn-sm rounded-0"  onclick="showPasswordEditModal(' +
+            id +
+            ')" type="button" data-toggle="tooltip" data-placement="top" title="Kennwort ändern"><ion-icon name="flower-outline"></ion-icon></button></li>'+
+            '<li class="list-inline-item"><button class="btn btn-danger btn-sm rounded-0" onclick="deleteUserById(' +
             id +
             ')" type="button" data-toggle="tooltip" data-placement="top" title="Löschen"><ion-icon name="trash-outline"></ion-icon></button></li></ul></td>'
         );
@@ -54,7 +59,8 @@
         $("#id-edit").val(data.id),
           $("#first-name-edit").val(data.firstName),
           $("#last-name-edit").val(data.lastName),
-          $("#user-name-edit").val(data.username),
+          $("#username-edit").val(data.username),
+          $("#password-edit").val(data.password),
           $("#role-edit").val(data.role),
           $("#locked-edit").val(data.locked),
           $("#enabled-edit").val(data.enabled);
@@ -67,6 +73,22 @@
     var modal = bootstrap.Modal.getOrCreateInstance(myModalEl3);
 
     $("#editUserModal").modal("show");
+  }
+
+  function showPasswordEditModal(id) {
+    getUserById(id)
+      .then((data) => {
+        $("#id-password-edit").val(data.id),
+        $("#username-password-edit").val(data.username)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    var myModalEl4 = document.querySelector("#editPasswordModal");
+    var modal = bootstrap.Modal.getOrCreateInstance(myModalEl4);
+
+    $("#editPasswordModal").modal("show");
   }
 
   function getUserById(id) {
@@ -159,6 +181,8 @@
       userToEdit = {
         firstName: $("#first-name-edit").val(),
         lastName: $("#last-name-edit").val(),
+        username: $("#username-edit").val(),
+        password: $("#password-edit").val(),
         role: $("#role-edit").val(),
         locked: $("#locked-edit").val(),
         enabled: $("#enabled-edit").val(),
@@ -185,6 +209,45 @@
             $(".message-placeholder").replaceWith(
               '<div id="message" class="message-placeholder alert alert-danger">Etwas ist schief gelaufen, bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.</div>'
             );
+          },
+          500: () => {
+            $("#message").show();
+            $(".message-placeholder").replaceWith(
+              '<div id="message" class="message-placeholder alert alert-danger">Diese Benutzer gibt es bereits! Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es erneut</div>'
+            );
+          },
+        },
+      });
+    });
+  });
+
+
+  
+  $(document).ready(function () {
+    $("#user-password-edit").submit(function (e) {
+      e.preventDefault();
+      id = $("#id-password-edit").val();
+      userPasswordToEdit = {
+        //id: $("#id-password-edit").val(),
+        username: $("#username-password-edit").val(),
+         password: $("#password-change").val()
+      };
+      $.ajax({
+        type: "PUT",
+        url: "http://localhost:8080/users/change-password/"+ id,
+        xhrFields: {
+          withCredentials: true,
+        },
+        contentType: "application/json",
+
+        data: JSON.stringify(userPasswordToEdit),
+        statusCode: {
+          200: function () {
+            $("#user-edit")[0].reset();
+            $("#message").hide();
+          },
+          400: () => {
+            $("#message").show();
           },
           500: () => {
             $("#message").show();
@@ -309,7 +372,7 @@
       </div>
     </div>
 
-    <!-- Edit Modal -->
+    <!-- Edit User Modal -->
     <div
       class="modal fade"
       id="editUserModal"
@@ -358,6 +421,14 @@
                     name="last-name-edit"
                     required
                   />
+                  <label for="username-edit" class="">Benutzername</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username-edit"
+                    name="username-edit"
+                    required
+                  />
                   <label for="role-edit">Rolle</label>
                   <select class="form-control" id="role-edit">
                     <option disabled selected value>
@@ -392,6 +463,85 @@
                       data-bs-dismiss="modal"
                     >
                       Bearbeiten
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="message" class="message-placeholder"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Schließen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Edit Password Modal -->
+    <div
+      class="modal fade"
+      id="editPasswordModal"
+      tabindex="-1"
+      aria-labelledby="editModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Kennwort ändern</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="user-password-edit">
+              <div class="form-group">
+                <div class="mb-3">
+                  <label for="id-password-edit" class="form-label">Id</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="id-password-edit"
+                    name="id-password-edit"
+                    disabled
+                  />
+                  <label for="username-password-edit" class="form-label">Benutzername</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username-password-edit"
+                    name="username-password-edit"
+                    disabled
+                  />                   
+                  <label for="password-change" class="">Kennwort</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="password-change"
+                    name="password-change"
+                    required
+                  />
+                 
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      data-bs-dismiss="modal"
+                    >
+                      Speichern
                     </button>
                   </div>
                 </div>

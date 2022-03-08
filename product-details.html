@@ -12,10 +12,11 @@
     integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
   <link rel="stylesheet" href="css/main.css" />
   <link rel="stylesheet" href="css/product-card.css" />
+  <link rel="stylesheet" href="css/product-details.css">
   <link rel="icon" href="./images/Tee_Shirts_Logo.svg" sizes="16x16 32x32" type="image/svg" />
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
     crossorigin="anonymous"></script>
-  <script src="./js/products.js"></script>
+    <script src="./js/product-details.js"></script>
 </head>
 
 <body>
@@ -35,7 +36,7 @@
               <a class="nav-link active" aria-current="page" href="index.html">Startseite</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="products.html">Produkte</a>
+              <a class="nav-link" href="products.html">Product</a>
             </li>
             <li id="admin" class="nav-item">
               <a class="nav-link" href="admin-dashboard.html">Shop Admin</a>
@@ -44,7 +45,6 @@
               <a class="nav-link" href="customer-dashboard.html">Mein Profil</a>
             </li>
           </ul>
-          
           <div class="d-flex bd-highlight mb-2">
             <div id="cart-button" class="p-2 bd-highlight">
               <a
@@ -69,11 +69,11 @@
     <div class="container-fluid products-container">
       <div class="col-12">
         <div class="d-flex justify-content-center pageTitle">
-          <h1>Produkte</h1>
+          <h1>Product Details</h1>
         </div>
       </div>
-      <!--Container for all products-->
-      <div class="products-cards-container col-12">
+      <!--Container Product Details-->
+      <div class="product-details col-12">
         <div class="row" id="output">
         </div>
       </div>

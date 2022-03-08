@@ -21,8 +21,8 @@ $(document).ready(function() {
                 200: function() {
                     buildUserCookie(user.username).then((token)=>{
                       token = btoa(JSON.stringify(token));
-                     sessionStorage.setItem("token-f",token);
-                     //window.location.replace('/index.html');
+                     sessionStorage.setItem("token",token);
+                     window.location.replace('/index.html');
                     }
                     )},
                 400 : () => {
