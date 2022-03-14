@@ -16,6 +16,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
     crossorigin="anonymous"></script>
   <script src="./js/products.js"></script>
+  <script src="./js/cart_button.js"></script>
 </head>
 
 <body>
@@ -23,7 +24,7 @@
     <nav class="navbar navbar-expand-md navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="index.html">
-          <img src="./images/Tee_Shirts_Logo.svg" alt="" width="250" height="60" class="d-inline-block align-text-top">
+          <img src="./images/Tee_Shirts_Logo.svg" alt="Tee Shirt Firmenlogo" width="250" height="60" class="d-inline-block align-text-top">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
           aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,13 +47,7 @@
           </ul>
           
           <div class="d-flex bd-highlight mb-2">
-            <div id="cart-button" class="p-2 bd-highlight">
-              <a
-                class="btn btn-danger"
-                href="cart.html"
-                role="button"
-                >Cart</a
-              >
+            <div id="cart-button" class="p-2 bd-highlight cart-button">
             </div>
             <div id="login" class="p-2 bd-highlight"><a class="btn btn-primary" href="login.html"
                 role="button">Einloggen</a></div>
@@ -71,6 +66,30 @@
         <div class="d-flex justify-content-center pageTitle">
           <h1>Produkte</h1>
         </div>
+      </div>
+      <div>
+        <div class="d-flex">
+          <div class="dropdown m-1">
+            <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+              Sortieren
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li><a class="dropdown-item" href="#" onclick="orderByPriceDown()">Preis aufsteigend</a></li>
+              <li><a class="dropdown-item" href="#" onclick="orderByPriceUp()">Preis absteigend</a></li>
+            </ul>
+          </div>
+          <div class="dropdown m-1">
+            <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+              Nach Kategorie filtern
+            </a>
+            <ul class="category-list dropdown-menu" aria-labelledby="dropdownMenuLink">
+            </ul>
+          </div>
+          <div>
+            <button class="btn btn-primary mt-1 m-1" onclick="listActiveProducts()">Alle Produkte</button>
+          </div>
+        </div>
+        
       </div>
       <!--Container for all products-->
       <div class="products-cards-container col-12">
