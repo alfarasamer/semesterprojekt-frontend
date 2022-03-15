@@ -122,9 +122,9 @@ function injectProducts(data) {
         productName +
         '" width="160">' +
         "</div>" +
-        "<h5>" +
+        "<h2>" +
         brand +
-        "</h5>" +
+        "</h2>" +
         '<div class="mt-3 info">' +
         '<span class="description d-block">' +
         description +

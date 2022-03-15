@@ -7,7 +7,7 @@ html{
 body {
     min-height: 100vh;
     display: flex;
-    flex-direction: column;v
+    flex-direction: column;
     /*padding-top: 30px;
     padding-bottom: 30px;*/
 }
@@ -16,7 +16,7 @@ footer{
     justify-content: center;
     padding: 10px;
     margin-top: auto;
-    background:darkgray;
+    background:darkslategray;
     color: white;
     text-decoration: none;
 }
