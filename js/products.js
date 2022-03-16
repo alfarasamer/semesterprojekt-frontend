@@ -114,9 +114,7 @@ function injectProducts(data) {
         '<div class="card mt-3 mb-3">' +
         '<div class="product-1 align-itens-center p-2 text-center">' +
         '<div class="image-container">' +
-        '<img class="product-image" src="' +
-        imageUrl +
-        '" alt="Produktfoto von Artikelnummer ' +
+        '<img class="product-image" src="http://localhost:8080/get-product-image/'+itemNumber+'" alt="Produktfoto von Artikelnummer ' +
         itemNumber +
         " Produktname " +
         productName +

@@ -21,7 +21,7 @@ function getProductByItemNumber() {
               '<div class="white-box text-center">'+
                 '<img'+
                 ' class="img-responsive"'+
-                  'src="'+imageUrl+'" alt="Produktfoto von Artikelnummer '+itemNumber+' Produktname '+productName+'"/>'+
+                  'src="http://localhost:8080/get-product-image/'+itemNumber+'" alt="Produktfoto von Artikelnummer '+itemNumber+' Produktname '+productName+'"/>'+
                   '</div>'+
             '</div>'+
             '<div class="col-12 col-lg-7 col-md-7">'+
@@ -81,6 +81,6 @@ function getProductByItemNumber() {
     }).done( function (data) {
         var cartItemsCount = data.cartItemsCount;
         var cartTotal = data.cartTotal;
-            $('.cart-button').replaceWith('<div id="cart-button" class="p-2 bd-highlight cart-button"><a class="btn btn-danger" href="cart.html" role="button">'+cartItemsCount+' Artikel | Gesammt '+cartTotal+' €</a></div>');
+            $('.cart-button').replaceWith('<div id="cart-button" class="p-2 bd-highlight cart-button"><a class="btn btn-danger" href="cart.html" role="button">'+cartItemsCount+' Artikel | Gesamt '+cartTotal+' €</a></div>');
                    
     })}

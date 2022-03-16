@@ -38,9 +38,7 @@
               itemNumber +
               '</th><td class="productdescription">' +
               description +
-              '</td><td class="image-thumbnail"><img class="product-image-thumbnail" src="' +
-              imageUrl +
-              '">' +
+              '</td><td class="image-thumbnail"><img class="product-image-thumbnail" src="http://localhost:8080/get-product-image/'+itemNumber+'">' +
               "</td>" +
               '<td><ul class="list-inline m-0"><li class="list-inline-item"><button class="btn btn-success btn-sm rounded-0" onclick="showAddPhotoModel(' +
               itemNumber +
@@ -52,13 +50,18 @@
   }
 
   function showAddPhotoModel(itemNumber) {
-    getProductById(itemNumber)
+    console.log("item number is", itemNumber);
+    $("#itemNumber").val(itemNumber);
+    $("#upload-file").val("");
+
+    /*getProductById(itemNumber)
       .then((data) => {
-        $("#itemNumber").val(data.itemNumber);
-      })
+        $("#item-Number").val(data.itemNumber);
+      });
+      /*
       .catch((err) => {
         console.log("ERROR : ",err);
-      });
+      });*/
 
     var myModalEl4 = document.querySelector("#addPhotoModal");
     var modal = bootstrap.Modal.getOrCreateInstance(myModalEl4);
@@ -87,7 +90,7 @@
       form = $(".imageUploadForm")[0];
       data = new FormData(form);
       e.preventDefault();
-      $("#submitButton").prop("disabled", true);
+      //$("#submitButton").prop("disabled", true);
       $.ajax({
         type: "POST",
         url: "http://localhost:8080/upload-product-image",
@@ -100,11 +103,14 @@
         cache: false,
         timeOut: 1000000,
         success: function (data) {
-          $("#submitButton").preventDefault();
+          $("#addPhotoModal").modal("hide");
+          listAllPhotos()
+          //$("#submitButton").preventDefault();
+          console.log(data);
         },
         error: function (e) {
           console.log("ERROR : ", e);
-          $("#submitButton").prop("disabled", false);
+          //$("#submitButton").prop("disabled", false);
         },
       });
     });
@@ -150,7 +156,7 @@
                     readonly
                   />
                   <label for="file" class="form-label">Produktbild</label>
-                  <input type="file" class="form-control" name="file" />
+                  <input id = "upload-file" type="file" class="form-control" name="file" />
                 </div>
                 <div class="row">
                   <div class="col">

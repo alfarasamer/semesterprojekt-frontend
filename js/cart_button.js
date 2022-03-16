@@ -14,7 +14,7 @@ function updateCartButton() {
     var cartItemsCount = data.cartItemsCount;
     var cartTotal = data.cartTotal;
 
-        $('.cart-button').append('<a class="btn btn-danger" href="cart.html" role="button">'+cartItemsCount+' Artikel | Gesammt '+cartTotal+' €</a>');
+        $('.cart-button').append('<a class="btn btn-danger" href="cart.html" role="button">'+cartItemsCount+' Artikel | Gesamt '+cartTotal+' €</a>');
                
 });
 }
